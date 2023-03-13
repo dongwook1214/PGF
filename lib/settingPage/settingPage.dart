@@ -37,14 +37,14 @@ class _SettingPageState extends State<SettingPage> {
         padding: EdgeInsets.only(left: width * 0.025, right: width * 0.025),
         child: Column(
           children: [
-            darkModeButton(),
+            darkModeListTile(),
           ],
         ),
       ),
     );
   }
 
-  Widget darkModeButton() {
+  Widget darkModeListTile() {
     return TitleAndDescriptionFormat(
       iconData: Icons.dark_mode_outlined,
       title: "dark mode",

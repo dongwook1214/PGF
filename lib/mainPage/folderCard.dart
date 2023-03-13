@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FolderCard extends StatelessWidget {
-  String title;
-  String publicKey;
-  String privateKey;
-  String lastChangedDate;
+  final String title;
+  final String publicKey;
+  final String privateKey;
+  final String lastChangedDate;
 
-  FolderCard(
+  const FolderCard(
       {super.key,
       required this.title,
       required this.publicKey,

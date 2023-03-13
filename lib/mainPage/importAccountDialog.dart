@@ -1,24 +1,21 @@
 import 'package:cryptofile/designClass/snackBarFormat.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../crypto/cryptoClass.dart';
 import '../crypto/cryptoKeyPair.dart';
 import '../designClass/dialogFormat.dart';
 import '../provider/accountProvider.dart';
 
 class ImportAccountDialog extends StatefulWidget {
-  SharedPreferences prefs;
-  ImportAccountDialog({super.key, required this.prefs});
+  final SharedPreferences prefs;
+  const ImportAccountDialog({super.key, required this.prefs});
 
   @override
-  State<ImportAccountDialog> createState() => _ImportAccountCardState();
+  State<ImportAccountDialog> createState() => _ImportAccountDialogState();
 }
 
-class _ImportAccountCardState extends State<ImportAccountDialog> {
+class _ImportAccountDialogState extends State<ImportAccountDialog> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController privateKeyController = TextEditingController();
   TextEditingController publicKeyController = TextEditingController();
