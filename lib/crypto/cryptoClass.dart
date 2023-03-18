@@ -5,33 +5,20 @@ import 'package:convert/convert.dart';
 import 'package:pointycastle/pointycastle.dart';
 import 'package:rsa_encrypt/rsa_encrypt.dart';
 import 'package:pointycastle/export.dart' as pointycastleCrypto;
-import 'cryptoKeyPair.dart';
+import 'package:cryptofile/crypto/RSAKeyPairClass.dart';
+
 import 'package:crypto/crypto.dart' as crypto;
 
 class CryptoClass {
-  static CryptoKeyPair getKeyPairFromPems(String publicPem, String privatePem) {
-    RsaKeyHelper helper = RsaKeyHelper();
-    RSAPrivateKey privateKey = helper.parsePrivateKeyFromPem(privatePem);
-    RSAPublicKey publicKey = helper.parsePublicKeyFromPem(publicPem);
-    return CryptoKeyPair(privateKey, publicKey);
-  }
-
-  static Future<CryptoKeyPair> createKeyPair() async {
+  static Future<RSAKeyPairClass> createKeyPair() async {
     RsaKeyHelper helper = RsaKeyHelper();
     pointycastleCrypto.AsymmetricKeyPair<pointycastleCrypto.PublicKey,
             pointycastleCrypto.PrivateKey> keyPair =
         await helper.computeRSAKeyPair(helper.getSecureRandom());
-    CryptoKeyPair cryptoKeyPair = CryptoKeyPair(
+    RSAKeyPairClass cryptoKeyPair = RSAKeyPairClass(
         keyPair.privateKey as pointycastleCrypto.RSAPrivateKey,
         keyPair.publicKey as pointycastleCrypto.RSAPublicKey);
     return cryptoKeyPair;
-  }
-
-  static bool isKeyPairValid(CryptoKeyPair keyPair) {
-    RsaKeyHelper helper = RsaKeyHelper();
-    String encryptedValid = encrypt("validity", keyPair.publicKey);
-    String decryptedValid = decrypt(encryptedValid, keyPair.privateKey);
-    return decryptedValid == "validity";
   }
 
   static String asymmetricEncryptData(
@@ -82,7 +69,7 @@ class CryptoClass {
     return base64Encode(digest.bytes);
   }
 
-  // CryptoKeyPair keyPair = await CryptoClass.createKeyPair();
+  // RSAKeyPairClass keyPair = await CryptoClass.createKeyPair();
   //             pointycastleCrypto.RSAPrivateKey tempPrivateKey = keyPair.privateKey;
   //             pointycastleCrypto.RSAPublicKey tempPublicKey = keyPair.publicKey;
 

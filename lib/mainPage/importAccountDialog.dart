@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../crypto/cryptoClass.dart';
-import '../crypto/cryptoKeyPair.dart';
+import '../crypto/RSAKeyPairClass.dart';
 import '../designClass/dialogFormat.dart';
 import '../provider/accountProvider.dart';
 
@@ -38,7 +38,7 @@ class _ImportAccountDialogState extends State<ImportAccountDialog> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    CryptoKeyPair keyPair = CryptoKeyPair.getCryptoKeyPairFromPems(
+    RSAKeyPairClass keyPair = RSAKeyPairClass.fromPems(
         publicKeyController.text, privateKeyController.text);
     await widget.prefs.setString("publicKey", keyPair.getPublicKeyString());
     await widget.prefs.setString("privateKey", keyPair.getPrivateKeyString());
@@ -96,9 +96,9 @@ class _ImportAccountDialogState extends State<ImportAccountDialog> {
 
   bool keyPairValidCheck() {
     try {
-      CryptoKeyPair keyPair = CryptoKeyPair.getCryptoKeyPairFromPems(
+      RSAKeyPairClass keyPair = RSAKeyPairClass.fromPems(
           publicKeyController.text, privateKeyController.text);
-      return CryptoClass.isKeyPairValid(keyPair);
+      return keyPair.isKeyPairValid();
     } catch (e) {
       return false;
     }

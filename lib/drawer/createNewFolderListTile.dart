@@ -6,7 +6,7 @@ import 'package:rsa_encrypt/rsa_encrypt.dart';
 import '../crypto/cryptoClass.dart';
 import '../provider/localDatabaseProvider.dart';
 import '../sqfLiteHandling/sqfLiteHandling.dart';
-import 'package:cryptofile/crypto/cryptoKeyPair.dart';
+import 'package:cryptofile/crypto/RSAKeyPairClass.dart';
 
 class CreateNewFolderListTile extends StatefulWidget {
   const CreateNewFolderListTile({super.key});
@@ -65,7 +65,7 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
   }
 
   Future _onOkFunction(Database db) async {
-    CryptoKeyPair keyPair = await CryptoClass.createKeyPair();
+    RSAKeyPairClass keyPair = await RSAKeyPairClass.createKeyPair();
     RsaKeyHelper helper = RsaKeyHelper();
     int date = DateTime.now().millisecondsSinceEpoch;
     String privateKey = helper.encodePrivateKeyToPemPKCS1(keyPair.privateKey);

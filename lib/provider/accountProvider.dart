@@ -1,21 +1,21 @@
 import 'package:cryptofile/crypto/cryptoClass.dart';
 import 'package:flutter/material.dart';
-import 'package:cryptofile/crypto/cryptoKeyPair.dart';
+import 'package:cryptofile/crypto/RSAKeyPairClass.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rsa_encrypt/rsa_encrypt.dart';
 
 class AccountProvider with ChangeNotifier {
-  CryptoKeyPair? _myAccount;
+  RSAKeyPairClass? _myAccount;
 
-  CryptoKeyPair? get myAccount => _myAccount;
+  RSAKeyPairClass? get myAccount => _myAccount;
 
   void initLogin(SharedPreferences prefs) {
     String? publicKey = prefs.getString("publicKey");
     String? privateKey = prefs.getString("privateKey");
 
     _myAccount = publicKey != null
-        ? CryptoClass.getKeyPairFromPems(publicKey, privateKey!)
+        ? RSAKeyPairClass.fromPems(publicKey, privateKey!)
         : null;
     print("init login finish");
     print("login info: " +
@@ -27,7 +27,7 @@ class AccountProvider with ChangeNotifier {
     String? privateKey = prefs.getString("privateKey");
 
     _myAccount = publicKey != null
-        ? CryptoClass.getKeyPairFromPems(publicKey, privateKey!)
+        ? RSAKeyPairClass.fromPems(publicKey, privateKey!)
         : null;
     print("login fisish");
     print("login info: " +

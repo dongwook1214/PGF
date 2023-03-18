@@ -1,5 +1,5 @@
 import 'package:cryptofile/crypto/cryptoClass.dart';
-import 'package:cryptofile/crypto/cryptoKeyPair.dart';
+import 'package:cryptofile/crypto/RSAKeyPairClass.dart';
 import 'package:cryptofile/designClass/dialogFormat.dart';
 import 'package:cryptofile/drawer/drawerClass.dart';
 import 'package:cryptofile/mainPage/importAccountDialog.dart';
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MainPage> {
   bool initFinished = false;
   late SharedPreferences prefs;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  CryptoKeyPair? _loginedKey;
+  RSAKeyPairClass? _loginedKey;
   late ColorScheme scheme;
   late List<Map<String, dynamic>> _foldersInfo;
 
@@ -128,7 +128,7 @@ class _MyHomePageState extends State<MainPage> {
   Widget _createAccountButton() {
     return ElevatedButton(
       onPressed: () async {
-        CryptoKeyPair keyPair = await CryptoClass.createKeyPair();
+        RSAKeyPairClass keyPair = await RSAKeyPairClass.createKeyPair();
         await prefs.setString("publicKey", keyPair.getPublicKeyString());
         await prefs.setString("privateKey", keyPair.getPrivateKeyString());
         Provider.of<AccountProvider>(context, listen: false).login(prefs);

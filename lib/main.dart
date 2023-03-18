@@ -45,13 +45,13 @@ class MyApp extends StatelessWidget {
                       value.isDarkMode ? ThemeMode.dark : ThemeMode.light,
                   home: snapshot.data!.getBool('isIntroComplete') != true
                       ? IntroScreen()
-                      : ContextMenuOverlay(child: MainPage()),
+                      : ContextMenuOverlay(child: const MainPage()),
                 );
               },
             ),
           );
         } else {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
       },
     );

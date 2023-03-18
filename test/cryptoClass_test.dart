@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'package:cryptofile/crypto/cryptoKeyPair.dart';
+import 'package:cryptofile/crypto/RSAKeyPairClass.dart';
 import 'package:flutter_test/flutter_test.dart';
 import "package:cryptofile/crypto/cryptoClass.dart";
 import 'package:rsa_encrypt/rsa_encrypt.dart';
@@ -9,7 +9,7 @@ void main() {
   test('비대칭 암호화 테스트', () async {
     String longText = "dfs";
     print(longText.length);
-    CryptoKeyPair keyPair = await CryptoClass.createKeyPair();
+    RSAKeyPairClass keyPair = await RSAKeyPairClass.createKeyPair();
     String encrypted =
         CryptoClass.asymmetricEncryptData(keyPair.publicKey, longText);
     String decrypted =
@@ -18,7 +18,7 @@ void main() {
   });
 
   test('test', () async {
-    CryptoKeyPair keyPair = await CryptoClass.createKeyPair();
+    RSAKeyPairClass keyPair = await RSAKeyPairClass.createKeyPair();
     print(keyPair.getPrivateKeyString());
     print(keyPair.getPublicKeyString());
     // print(keyPair.getPrivateKeyString().length);
@@ -30,7 +30,7 @@ void main() {
   });
 
   test('test', () async {
-    CryptoKeyPair keyPair = await CryptoClass.createKeyPair();
+    RSAKeyPairClass keyPair = await RSAKeyPairClass.createKeyPair();
     String plainText = "hi";
     String pemPrivate = '''-----BEGIN PRIVATE KEY-----
 MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCbC+BiKA7EcfGRjklBnfgUTy6BucH4nPFHwQhS6U2szq4CpkPd4jFw3JqIc9y75NEbqbWHm+8BE2CHhO50DsU3EyVBefUoejlLqR426bNqeFW9/lUEFi4E4def+YoIny1eCAe3tMVUmA8YMe3vbb2Gc6mB9+xAVBfSEZSi0vlB9PkbdAbeTYhSzGPElucOcO3+Gd/del0FAi4w92p9uNsLEuOb08UMYK+Jyh2ivOF9C+xlnv/p+eSxptcb8Fthh9GZciS/yGHNR1GhJ3u22s6knZU+DaVUNbmkCrlu5vQKPWqiiTHoPVvj2RJ2RTp+siKm/OFnJXg4HUMB1TQt3UCNAgMBAAECggEAYyqkeIOAdnsec+eayUI9UtgWOdjSzK2s0SUQqt8X1EhZGc64J6mtz675k/7vFqpSaKwSNEszAfAf1G3cihSMZR50vL1BZYNPNCpV7e9p1tZimOOcAsIg6vR8EpDrjXop7TObpA8WC3Y6aVI+Cd6Z0u4VY9BrpfVjSvP9qmrgDCOhabwwHT3XxmaHBvmVN7IrMhvo5Lfy0IyHVpYrMqbv7rAu5Dk9eVlvIV7gmKBt9mOHOSuNOSIeJ4YTTQMTojID6GD4K+lGucgCocke9/Wk6qgLCFBBqr/Qlh8EmoBGmlIUJFPR+neBf+u67HzThxzjoR3xS1oxQf3E3Ndc5s1x7QKBgQDLwPmY4hiTpEP0ky8mp0cS1eHykLs00MY4quX04oDVXOHAF6FbBvQBBMMJXtQuqfV62Rpo017EzzSyIqFmV2IafpNIiOSLqbQlgKzDGKlmjkcvnG8vlxJPAO2ZpwXxJ1cMmTJYxfrFa9TnLKDCTBgNADoWjLOAW6daEfL0TmJsgwKBgQDCzZjpgLrF3JYYAhN2pLE4Fx4LTqjFQBrPLmtMmMsc9SoM++rsgZ4AW9cFXdDmnyqcvEpo2g/oHvSnDYiU8ILQfZoefdw6n0SOfH5bRGr+Puu4+b7jzG8oRoqnfoM6EX0FAf4NWwyLXoXiFYrkW8M5l8a0ZRo+xzHc+adzLfAxrwKBgDaQEMb+FPLElGYUXBYPyZqjqAQa+ebk2ZAnQ7lWRoXcf5+/NDh6HjF/ovMJb+ynGtOw+7+CiuhNTKE/YNVVJTJPHwXXksxLv7AjSyBbpFGQXEPFsoid/gsmBnqVHaQ8krUO+UqIieUAQV0+uDYPxokEvIl5WEBRSvl1wQfnTbgdAoGAX1ohwhIn2hfqRCAoBMgCkxEFvMUo6TxCoyz2ioyzxx3eEnLxAAlGHKjXrCHK0kgQpJ2p0n8CkD0uxeJi+3xqm8EPQmOa+/rfpNsdQnFP6dlEqstce8aillVJI0lS1Iag6mWaRFFP55xB7nNbBAJCohs/wSdH3HjGWIK/SyquSrMCgYB0zXGx5zslbFhlXvMCrwjin15WzuRLUzAEkEi4/8Tv94Bw+GAHtF9QZKccLVyrFk4qtRe08fuGdJFTqbyDRTPBxfurB1prrYaEIiuN1HJ6KKQLKaFX49MbEsdoOCVTEaHZssborB73M7xtBG0iYIixXqvuk7axRg5RQ8G303+Mww==
@@ -60,7 +60,7 @@ MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDZM/kSGc3/ut5dCd65woQGeYKK+nGW
     String pemPublic = '''-----BEGIN RSA PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2TP5EhnN/7reXQneucKEBnmCivpxlv4Vlu44QMIV+XLxM1uagb8Mexzbr0pW4WIsoyoJyV4vwttIJxu97PlTFXycmyZjIAdDcaNl3/EvgOZA6M3FmGKQFd4PccdrZcG7PLQ3hTTZ3t1SFPDRjoscvujV9fQtwalVkRSaLo4q/PFEOgADqw2rckkhJAA+fWW7cZnGwuFZSVV30ieOntotgBr00EYmquyLiy6m/6wYThbavOd6lf3KqFdl4ehrxBjP19mhLMaa8H7Oydd651ZDv482cl0siNOcAlrN0jZWHyoZIFhEtQlyoWHygv09sXTph7nxeool84atMvbGP2mo/wIDAQAB
 -----END RSA PUBLIC KEY-----''';
-    CryptoKeyPair keyPair = CryptoKeyPair(
+    RSAKeyPairClass keyPair = RSAKeyPairClass(
         helper.parsePrivateKeyFromPem(pemPrivate),
         helper.parsePublicKeyFromPem(pemPublic));
     String encrypted =
