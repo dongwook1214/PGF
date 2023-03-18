@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:cryptofile/dto/fileClass.dart';
+import 'package:cryptofile/dto/fileDTO.dart';
 import 'package:cryptofile/dto/readAuthorityFolder.dart';
 import 'package:cryptofile/dto/writeAuthorityFolder.dart';
 

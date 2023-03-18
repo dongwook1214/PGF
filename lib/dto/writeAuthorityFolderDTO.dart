@@ -1,6 +1,4 @@
-import 'package:cryptofile/dto/folder.dart';
-
-class WriteAuthorityFolder implements Folder {
+class writeAuthorityFolderDTO {
   final String folderCP;
   final String folderPublicKey;
   final String folderPrivateKeyEWA;
@@ -8,7 +6,7 @@ class WriteAuthorityFolder implements Folder {
   final String title;
   final String symmetricKeyEWF;
   final int lastChangedDate;
-  WriteAuthorityFolder(
+  writeAuthorityFolderDTO(
       this.folderCP,
       this.folderPublicKey,
       this.folderPrivateKeyEWA,

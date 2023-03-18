@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:pointycastle/export.dart' as pointcastleCrypto;
+import 'package:pointycastle/export.dart' as pointycastleCrypto;
 import 'package:rsa_encrypt/rsa_encrypt.dart';
 
 class RSAKeyPairClass {
-  late pointcastleCrypto.RSAPrivateKey privateKey;
-  late pointcastleCrypto.RSAPublicKey publicKey;
+  late pointycastleCrypto.RSAPrivateKey privateKey;
+  late pointycastleCrypto.RSAPublicKey publicKey;
 
   RSAKeyPairClass(this.privateKey, this.publicKey);
   RSAKeyPairClass.fromPems(String public, String private) {
@@ -15,12 +15,12 @@ class RSAKeyPairClass {
 
   static Future<RSAKeyPairClass> createKeyPair() async {
     RsaKeyHelper helper = RsaKeyHelper();
-    pointcastleCrypto.AsymmetricKeyPair<pointcastleCrypto.PublicKey,
-            pointcastleCrypto.PrivateKey> keyPair =
+    pointycastleCrypto.AsymmetricKeyPair<pointycastleCrypto.PublicKey,
+            pointycastleCrypto.PrivateKey> keyPair =
         await helper.computeRSAKeyPair(helper.getSecureRandom());
     RSAKeyPairClass cryptoKeyPair = RSAKeyPairClass(
-        keyPair.privateKey as pointcastleCrypto.RSAPrivateKey,
-        keyPair.publicKey as pointcastleCrypto.RSAPublicKey);
+        keyPair.privateKey as pointycastleCrypto.RSAPrivateKey,
+        keyPair.publicKey as pointycastleCrypto.RSAPublicKey);
     return cryptoKeyPair;
   }
 

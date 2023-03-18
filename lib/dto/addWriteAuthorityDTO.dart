@@ -1,4 +1,4 @@
-class AddWriteAuthority {
+class AddWriteAuthorityDTO {
   final String accountCp;
 
   final String folderCp;
@@ -7,6 +7,6 @@ class AddWriteAuthority {
 
   final String folderPrivateKeyEWA;
 
-  AddWriteAuthority(this.accountCp, this.folderCp, this.folderPublicKey,
+  AddWriteAuthorityDTO(this.accountCp, this.folderCp, this.folderPublicKey,
       this.folderPrivateKeyEWA);
 }
