@@ -8,18 +8,27 @@ import 'package:crypto/crypto.dart' as crypto;
 
 class CryptoClass {
   static String asymmetricEncryptData(
-      pointycastleCrypto.RSAPublicKey publicKey, String str) {
+      pointycastleCrypto.RSAPublicKey publicKey, String plainText) {
     int i = 0;
-    int subNum = str.length ~/ 256;
+    int subNum = plainText.length ~/ 256;
     String encryptedText = "";
     for (i; i < subNum; ++i) {
-      String stringToEncrypt = str.substring(i * 256, i * 256 + 256);
+      String stringToEncrypt = plainText.substring(i * 256, i * 256 + 256);
       encryptedText += encrypt(stringToEncrypt, publicKey);
     }
-    if (str.length % 256 != 0) {
-      String stringToEncrypt = str.substring(i * 256);
+    if (plainText.length % 256 != 0) {
+      String stringToEncrypt = plainText.substring(i * 256);
       encryptedText += encrypt(stringToEncrypt, publicKey);
     }
+    return encryptedText;
+  }
+
+  static String asymmetricEncryptDataFromPem(
+      String publicKeyPem, String plainText) {
+    RsaKeyHelper helper = RsaKeyHelper();
+    pointycastleCrypto.RSAPublicKey publicKey =
+        helper.parsePublicKeyFromPem(publicKeyPem);
+    String encryptedText = encrypt(plainText, publicKey);
     return encryptedText;
   }
 
@@ -32,6 +41,15 @@ class CryptoClass {
       String stringToDecrypt = encryptedText.substring(i * 256, i * 256 + 256);
       decryptedText += decrypt(stringToDecrypt, privateKey);
     }
+    return decryptedText;
+  }
+
+  static String asymmetricDecryptDataFromPem(
+      String privateKeyPem, String encryptedText) {
+    RsaKeyHelper helper = RsaKeyHelper();
+    pointycastleCrypto.RSAPrivateKey privateKey =
+        helper.parsePrivateKeyFromPem(privateKeyPem);
+    String decryptedText = decrypt(encryptedText, privateKey);
     return decryptedText;
   }
 

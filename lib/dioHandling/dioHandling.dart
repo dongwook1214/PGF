@@ -1,28 +1,37 @@
+import 'package:cryptofile/dto/generateFolderDTO.dart';
 import 'package:dio/dio.dart';
 import 'package:cryptofile/dto/fileDTO.dart';
-import 'package:cryptofile/dto/readAuthorityFolder.dart';
-import 'package:cryptofile/dto/writeAuthorityFolder.dart';
+import 'package:cryptofile/dto/readAuthorityFolderDTO.dart';
+import 'package:cryptofile/dto/writeAuthorityFolderDTO.dart';
 
 class DioHandling {
   DioHandling._privateConstructor();
   static final DioHandling _instance = DioHandling._privateConstructor();
   final Dio dio = Dio();
+  final String baseUrl =
+      "http://ec2-43-201-160-79.ap-northeast-2.compute.amazonaws.com:8080";
   factory DioHandling() {
     return _instance;
   }
 
-  Future<String> generateFolder() async {
-    return "";
+  Future<String> generateFolder(GenerateFolderDTO dto, String folderCP) async {
+    Response request = await dio.request(
+      "$baseUrl/api/v1/folders/$folderCP",
+      data: dto,
+      options: Options(method: 'POST'),
+    );
+    print(request.data);
+    return request.data["folderCP"].toString();
   }
 
-  Future<List<WriteAuthorityFolder>> getWriteAuthByAccountCP() async {
-    WriteAuthorityFolder folder =
-        WriteAuthorityFolder("", "", "", true, "", "", 1);
+  Future<List<WriteAuthorityFolderDTO>> getWriteAuthByAccountCP() async {
+    WriteAuthorityFolderDTO folder =
+        WriteAuthorityFolderDTO("", "", "", true, "", "", 1);
     return [folder];
   }
 
-  Future<List<ReadAuthorityFolder>> getReadAuthByAccountCP() async {
-    ReadAuthorityFolder folder = ReadAuthorityFolder("", true, "", "", 1);
+  Future<List<ReadAuthorityFolderDTO>> getReadAuthByAccountCP() async {
+    ReadAuthorityFolderDTO folder = ReadAuthorityFolderDTO("", true, "", "", 1);
     return [folder];
   }
 
@@ -34,8 +43,8 @@ class DioHandling {
     return "";
   }
 
-  Future<List<FileClass>> getFileByFolderCP() async {
-    FileClass file = FileClass("", "", 1, "", "");
+  Future<List<FileDTO>> getFileByFolderCP() async {
+    FileDTO file = FileDTO("", "", 1, "", "");
     return [file];
   }
 

@@ -46,8 +46,6 @@ dependencies:
   context_menus: ^1.0.2
   crypto: ^3.0.2
   dio: ^5.0.2
-  aes_crypt: ^0.1.1
-  rsa_pkcs: ^2.0.1
 
 dev_dependencies:
   flutter_test:

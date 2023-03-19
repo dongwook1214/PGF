@@ -1,4 +1,4 @@
-class writeAuthorityFolderDTO {
+class WriteAuthorityFolderDTO {
   final String folderCP;
   final String folderPublicKey;
   final String folderPrivateKeyEWA;
@@ -6,7 +6,7 @@ class writeAuthorityFolderDTO {
   final String title;
   final String symmetricKeyEWF;
   final int lastChangedDate;
-  writeAuthorityFolderDTO(
+  WriteAuthorityFolderDTO(
       this.folderCP,
       this.folderPublicKey,
       this.folderPrivateKeyEWA,
