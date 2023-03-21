@@ -1,7 +1,7 @@
 class AddSubscribeDemandDTO {
   final String folderCP;
   final String accountPublicKey;
-  final String sign;
+  final List<int> byteSign;
 
-  AddSubscribeDemandDTO(this.folderCP, this.accountPublicKey, this.sign);
+  AddSubscribeDemandDTO(this.folderCP, this.accountPublicKey, this.byteSign);
 }

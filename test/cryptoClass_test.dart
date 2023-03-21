@@ -25,6 +25,15 @@ void main() {
     // print(keyPair.getPublicKeyString().length);
   });
 
+  test('test', () async {
+    RSAKeyPairClass keyPair = await RSAKeyPairClass.createKeyPair();
+    RsaKeyHelper helper = RsaKeyHelper();
+    print(helper.encodePrivateKeyToPemPKCS1(keyPair.privateKey) ==
+        helper.encodePrivateKeyToPemPKCS8(keyPair.privateKey));
+    print(helper.encodePublicKeyToPemPKCS1(keyPair.publicKey) ==
+        helper.encodePublicKeyToPemPKCS8(keyPair.publicKey));
+  });
+
   test('pem 테스트', () async {
     String pemPrivate = '''
 MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCbC+BiKA7EcfGRjklBnfgUTy6BucH4nPFHwQhS6U2szq4CpkPd4jFw3JqIc9y75NEbqbWHm+8BE2CHhO50DsU3EyVBefUoejlLqR426bNqeFW9/lUEFi4E4def+YoIny1eCAe3tMVUmA8YMe3vbb2Gc6mB9+xAVBfSEZSi0vlB9PkbdAbeTYhSzGPElucOcO3+Gd/del0FAi4w92p9uNsLEuOb08UMYK+Jyh2ivOF9C+xlnv/p+eSxptcb8Fthh9GZciS/yGHNR1GhJ3u22s6knZU+DaVUNbmkCrlu5vQKPWqiiTHoPVvj2RJ2RTp+siKm/OFnJXg4HUMB1TQt3UCNAgMBAAECggEAYyqkeIOAdnsec+eayUI9UtgWOdjSzK2s0SUQqt8X1EhZGc64J6mtz675k/7vFqpSaKwSNEszAfAf1G3cihSMZR50vL1BZYNPNCpV7e9p1tZimOOcAsIg6vR8EpDrjXop7TObpA8WC3Y6aVI+Cd6Z0u4VY9BrpfVjSvP9qmrgDCOhabwwHT3XxmaHBvmVN7IrMhvo5Lfy0IyHVpYrMqbv7rAu5Dk9eVlvIV7gmKBt9mOHOSuNOSIeJ4YTTQMTojID6GD4K+lGucgCocke9/Wk6qgLCFBBqr/Qlh8EmoBGmlIUJFPR+neBf+u67HzThxzjoR3xS1oxQf3E3Ndc5s1x7QKBgQDLwPmY4hiTpEP0ky8mp0cS1eHykLs00MY4quX04oDVXOHAF6FbBvQBBMMJXtQuqfV62Rpo017EzzSyIqFmV2IafpNIiOSLqbQlgKzDGKlmjkcvnG8vlxJPAO2ZpwXxJ1cMmTJYxfrFa9TnLKDCTBgNADoWjLOAW6daEfL0TmJsgwKBgQDCzZjpgLrF3JYYAhN2pLE4Fx4LTqjFQBrPLmtMmMsc9SoM++rsgZ4AW9cFXdDmnyqcvEpo2g/oHvSnDYiU8ILQfZoefdw6n0SOfH5bRGr+Puu4+b7jzG8oRoqnfoM6EX0FAf4NWwyLXoXiFYrkW8M5l8a0ZRo+xzHc+adzLfAxrwKBgDaQEMb+FPLElGYUXBYPyZqjqAQa+ebk2ZAnQ7lWRoXcf5+/NDh6HjF/ovMJb+ynGtOw+7+CiuhNTKE/YNVVJTJPHwXXksxLv7AjSyBbpFGQXEPFsoid/gsmBnqVHaQ8krUO+UqIieUAQV0+uDYPxokEvIl5WEBRSvl1wQfnTbgdAoGAX1ohwhIn2hfqRCAoBMgCkxEFvMUo6TxCoyz2ioyzxx3eEnLxAAlGHKjXrCHK0kgQpJ2p0n8CkD0uxeJi+3xqm8EPQmOa+/rfpNsdQnFP6dlEqstce8aillVJI0lS1Iag6mWaRFFP55xB7nNbBAJCohs/wSdH3HjGWIK/SyquSrMCgYB0zXGx5zslbFhlXvMCrwjin15WzuRLUzAEkEi4/8Tv94Bw+GAHtF9QZKccLVyrFk4qtRe08fuGdJFTqbyDRTPBxfurB1prrYaEIiuN1HJ6KKQLKaFX49MbEsdoOCVTEaHZssborB73M7xtBG0iYIixXqvuk7axRg5RQ8G303+Mww==

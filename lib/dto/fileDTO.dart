@@ -1,7 +1,7 @@
 class FileDTO {
   final String folderCP;
   final String fileId;
-  final int lastChangedDate;
+  final String lastChangedDate;
   final String subheadEWS;
   final String contentsEWS;
 

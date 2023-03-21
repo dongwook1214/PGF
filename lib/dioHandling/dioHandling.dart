@@ -1,4 +1,10 @@
+import 'package:cryptofile/dto/addSubscribeDemandDTO.dart';
+import 'package:cryptofile/dto/addWriteAuthorityDTO.dart';
+import 'package:cryptofile/dto/allowSubscribeDTO.dart';
+import 'package:cryptofile/dto/generateFileDTO.dart';
 import 'package:cryptofile/dto/generateFolderDTO.dart';
+import 'package:cryptofile/dto/modifyFileDTO.dart';
+import 'package:cryptofile/dto/searchContentsDTO.dart';
 import 'package:dio/dio.dart';
 import 'package:cryptofile/dto/fileDTO.dart';
 import 'package:cryptofile/dto/readAuthorityFolderDTO.dart';
@@ -15,49 +21,149 @@ class DioHandling {
   }
 
   Future<String> generateFolder(GenerateFolderDTO dto, String folderCP) async {
-    Response request = await dio.request(
+    Response res = await dio.request(
       "$baseUrl/api/v1/folders/$folderCP",
       data: dto,
       options: Options(method: 'POST'),
     );
-    print(request.data);
-    return request.data["folderCP"].toString();
+    print(res.data);
+    return res.data["folderCP"].toString();
   }
 
-  Future<List<WriteAuthorityFolderDTO>> getWriteAuthByAccountCP() async {
-    WriteAuthorityFolderDTO folder =
-        WriteAuthorityFolderDTO("", "", "", true, "", "", 1);
-    return [folder];
+  Future<List<WriteAuthorityFolderDTO>> getWriteAuthByAccountCP(
+      String accountCP) async {
+    Response res = await dio.request(
+      "$baseUrl/api/v1/write-auths/$accountCP/folders",
+      options: Options(method: 'GET'),
+    );
+    print(res.data);
+    List list = res.data;
+    List<WriteAuthorityFolderDTO> writeAuthorityFolderList = [];
+    for (int i = 0; i < list.length; ++i) {
+      WriteAuthorityFolderDTO folder = WriteAuthorityFolderDTO(
+          list[i]["folderCP"],
+          list[i]["folderPublicKey"],
+          list[i]["folderPrivateKeyEWA"],
+          list[i]["isTitleOpen"],
+          list[i]["title"],
+          list[i]["symmetricKeyEWF"],
+          list[i]["lastChangedDate"]);
+      writeAuthorityFolderList.add(folder);
+    }
+    return writeAuthorityFolderList;
   }
 
-  Future<List<ReadAuthorityFolderDTO>> getReadAuthByAccountCP() async {
-    ReadAuthorityFolderDTO folder = ReadAuthorityFolderDTO("", true, "", "", 1);
-    return [folder];
+  Future<List<ReadAuthorityFolderDTO>> getReadAuthByAccountCP(
+      String accountCP) async {
+    Response res = await dio.request(
+      "$baseUrl/api/v1/read-auths/$accountCP/folders",
+      options: Options(method: 'GET'),
+    );
+    print(res.data);
+    List list = res.data;
+    List<ReadAuthorityFolderDTO> readAuthorityFolderList = [];
+    for (int i = 0; i < list.length; ++i) {
+      ReadAuthorityFolderDTO folder = ReadAuthorityFolderDTO(
+        list[i]["folderCP"],
+        list[i]["isTitleOpen"],
+        list[i]["title"],
+        list[i]["symmetricKeyEWA"],
+        list[i]["lastChangedDate"],
+      );
+      readAuthorityFolderList.add(folder);
+    }
+    return readAuthorityFolderList;
   }
 
-  Future<String> generateFile() async {
-    return "";
+  Future<String> generateFile(
+      String folderPublicKey, GenerateFileDTO dto) async {
+    Response res = await dio.request(
+      "$baseUrl/api/v1/folders/$folderPublicKey/files",
+      data: dto,
+      options: Options(method: 'POST'),
+    );
+    print(res.data);
+    return res.data;
   }
 
-  Future<String> modifyFile() async {
-    return "";
+  Future<String> modifyFile(
+      ModifyFileDTO dto, String folderPublickey, String fileId) async {
+    Response res = await dio.request(
+      "$baseUrl/api/v1/folders/$folderPublickey/files/$fileId",
+      options: Options(method: 'PUT'),
+      data: dto,
+    );
+    print(res.data);
+    return res.data;
   }
 
-  Future<List<FileDTO>> getFileByFolderCP() async {
-    FileDTO file = FileDTO("", "", 1, "", "");
-    return [file];
+  Future<List<FileDTO>> getFileByFolderCP(String folderCP) async {
+    Response res = await dio.request(
+      "$baseUrl/api/v1/folders/$folderCP/files",
+      options: Options(method: 'GET'),
+    );
+    print(res.data);
+    List list = res.data;
+    List<FileDTO> fileList = [];
+    for (int i = 0; i < list.length; ++i) {
+      FileDTO file = FileDTO(
+          list[i]["folderCP"],
+          list[i]["fileId"],
+          list[i]["lastChangedDate"],
+          list[i]["subheadEWS"],
+          list[i]["contentsEWS"]);
+      fileList.add(file);
+    }
+
+    return fileList;
   }
 
-  Future<void> addSubscribeDemand() async {}
-
-  Future<void> allowSubscribe() async {}
-
-  Future<List<String>> getSubscribeDemands() async {
-    return [""];
+  Future<void> addSubscribeDemand(AddSubscribeDemandDTO dto) async {
+    Response res = await dio.request(
+      "$baseUrl/api/v1/subscribe-demands/add",
+      options: Options(method: 'POST'),
+      data: dto,
+    );
+    print(res.data);
   }
 
-  Future<void> addWriteAuthority() async {}
-  Future<List> search() async {
-    return [""];
+  Future<void> allowSubscribe(AllowSubscribeDTO dto) async {
+    Response res = await dio.request(
+      "$baseUrl/api/v1/subscribe-demands/allow",
+      options: Options(method: 'POST'),
+      data: dto,
+    );
+    print(res);
+  }
+
+  Future<List<String>> getSubscribeDemands(String folderCP) async {
+    Response res = await dio.request(
+      "$baseUrl/api/v1/subscribe-demands?$folderCP",
+      options: Options(method: 'GET'),
+    );
+    print(res.data);
+    return res.data;
+  }
+
+  Future<void> addWriteAuthority(AddWriteAuthorityDTO dto) async {
+    Response res = await dio.request("$baseUrl/api/v1/write-auths",
+        options: Options(method: 'POST'), data: dto);
+    print(res.data);
+  }
+
+  Future<List> search(String keyword) async {
+    Response res = await dio.request(
+      "$baseUrl/api/v1/folders?$keyword",
+      options: Options(method: 'GET'),
+    );
+    print(res.data);
+    List list = res.data;
+    List<SearchContentsDTO> searchList = [];
+    for (int i = 0; i < list.length; ++i) {
+      SearchContentsDTO search =
+          SearchContentsDTO(list[i]["title"], list[i]["folderCP"]);
+      searchList.add(search);
+    }
+    return searchList;
   }
 }

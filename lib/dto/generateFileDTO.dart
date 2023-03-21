@@ -1,7 +1,6 @@
 class GenerateFileDTO {
-  final String sign;
-  final String folderPublicKey;
+  final List<int> byteSign;
   final String subhead;
 
-  GenerateFileDTO(this.sign, this.folderPublicKey, this.subhead);
+  GenerateFileDTO(this.byteSign, this.subhead);
 }

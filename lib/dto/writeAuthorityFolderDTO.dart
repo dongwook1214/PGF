@@ -5,7 +5,7 @@ class WriteAuthorityFolderDTO {
   final bool isTitleOpen;
   final String title;
   final String symmetricKeyEWF;
-  final int lastChangedDate;
+  final String lastChangedDate;
   WriteAuthorityFolderDTO(
       this.folderCP,
       this.folderPublicKey,

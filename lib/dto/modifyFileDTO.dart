@@ -1,8 +1,7 @@
 class ModifyFileDTO {
-  final String sign;
-  final String folderPublicKey;
+  final List<int> byteSign;
   final String contents;
   final String subhead;
 
-  ModifyFileDTO(this.sign, this.folderPublicKey, this.contents, this.subhead);
+  ModifyFileDTO(this.byteSign, this.contents, this.subhead);
 }
