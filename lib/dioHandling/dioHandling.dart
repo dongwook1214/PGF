@@ -24,10 +24,11 @@ class DioHandling {
     Response res = await dio.request(
       "$baseUrl/api/v1/folders/$folderCP",
       data: dto,
-      options: Options(method: 'POST'),
+      options: Options(method: 'POST', contentType: "application/json"),
     );
+    //responseType: ResponseType.plain
     print(res.data);
-    return res.data["folderCP"].toString();
+    return res.data.toString();
   }
 
   Future<List<WriteAuthorityFolderDTO>> getWriteAuthByAccountCP(
@@ -80,7 +81,7 @@ class DioHandling {
     Response res = await dio.request(
       "$baseUrl/api/v1/folders/$folderPublicKey/files",
       data: dto,
-      options: Options(method: 'POST'),
+      options: Options(method: 'POST', contentType: "application/json"),
     );
     print(res.data);
     return res.data;
@@ -90,7 +91,7 @@ class DioHandling {
       ModifyFileDTO dto, String folderPublickey, String fileId) async {
     Response res = await dio.request(
       "$baseUrl/api/v1/folders/$folderPublickey/files/$fileId",
-      options: Options(method: 'PUT'),
+      options: Options(method: 'PUT', contentType: "application/json"),
       data: dto,
     );
     print(res.data);
@@ -121,7 +122,7 @@ class DioHandling {
   Future<void> addSubscribeDemand(AddSubscribeDemandDTO dto) async {
     Response res = await dio.request(
       "$baseUrl/api/v1/subscribe-demands/add",
-      options: Options(method: 'POST'),
+      options: Options(method: 'POST', contentType: "application/json"),
       data: dto,
     );
     print(res.data);
@@ -130,7 +131,7 @@ class DioHandling {
   Future<void> allowSubscribe(AllowSubscribeDTO dto) async {
     Response res = await dio.request(
       "$baseUrl/api/v1/subscribe-demands/allow",
-      options: Options(method: 'POST'),
+      options: Options(method: 'POST', contentType: "application/json"),
       data: dto,
     );
     print(res);
@@ -142,12 +143,20 @@ class DioHandling {
       options: Options(method: 'GET'),
     );
     print(res.data);
-    return res.data;
+    List list = res.data;
+    List<String> subscribeDemandsList = [];
+    for (int i = 0; i < list.length; ++i) {
+      subscribeDemandsList.add(list[i].toString());
+    }
+    return subscribeDemandsList;
   }
 
   Future<void> addWriteAuthority(AddWriteAuthorityDTO dto) async {
-    Response res = await dio.request("$baseUrl/api/v1/write-auths",
-        options: Options(method: 'POST'), data: dto);
+    Response res = await dio.request(
+      "$baseUrl/api/v1/write-auths",
+      options: Options(method: 'POST', contentType: "application/json"),
+      data: dto,
+    );
     print(res.data);
   }
 

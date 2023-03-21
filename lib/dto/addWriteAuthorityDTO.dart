@@ -9,4 +9,13 @@ class AddWriteAuthorityDTO {
 
   AddWriteAuthorityDTO(this.accountCp, this.folderCp, this.folderPublicKey,
       this.folderPrivateKeyEWA);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'accountCp': accountCp,
+      'folderCp': folderCp,
+      'folderPublicKey': folderPublicKey,
+      "folderPrivateKeyEWA": folderPrivateKeyEWA,
+    };
+  }
 }

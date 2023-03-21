@@ -48,10 +48,9 @@ void main() {
 
   test("dio generateFolder test", () async {
     DioHandling _instance = DioHandling();
-    String folderCP = "sadasda";
     GenerateFolderDTO dto =
         GenerateFolderDTO(true, "hihi", "fasgfkasgkfjhaskjfhawirqwoh");
-    String str = await _instance.generateFolder(dto, folderCP);
+    String str = await _instance.generateFolder(dto, "sadasda");
     print(str);
   });
   test("dio getWriteAuthByAccountCP test", () async {

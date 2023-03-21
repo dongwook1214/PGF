@@ -3,7 +3,7 @@ class ReadAuthorityFolderDTO {
   final bool isTitleOpen;
   final String title;
   final String symmetricKeyEWA;
-  final int lastChangedDate;
+  final String lastChangedDate;
 
   ReadAuthorityFolderDTO(this.folderCP, this.isTitleOpen, this.title,
       this.symmetricKeyEWA, this.lastChangedDate);
