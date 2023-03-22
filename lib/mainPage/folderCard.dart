@@ -26,7 +26,11 @@ class FolderCard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (_) => FileMain()));
+              context,
+              MaterialPageRoute(
+                  builder: (_) => FileMain(
+                        title: title,
+                      )));
         },
         onLongPress: () {},
         child: ContextMenuRegion(

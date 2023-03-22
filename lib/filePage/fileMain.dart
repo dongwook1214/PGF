@@ -2,7 +2,8 @@ import 'package:cryptofile/designClass/borderCard.dart';
 import 'package:flutter/material.dart';
 
 class FileMain extends StatefulWidget {
-  const FileMain({super.key});
+  String title;
+  FileMain({super.key, required this.title});
 
   @override
   State<FileMain> createState() => _PaperMainState();
@@ -17,6 +18,7 @@ class _PaperMainState extends State<FileMain> {
     scheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
+        title: Text(widget.title),
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
