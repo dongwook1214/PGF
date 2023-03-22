@@ -1,4 +1,6 @@
 import 'package:cryptofile/designClass/borderCard.dart';
+import 'package:cryptofile/dto/fileDTO.dart';
+import 'package:cryptofile/filePage/filePage.dart';
 import 'package:flutter/material.dart';
 
 class FileMain extends StatefulWidget {
@@ -30,26 +32,34 @@ class _PaperMainState extends State<FileMain> {
       ),
       body: ListView.builder(
         itemCount: 3,
-        itemBuilder: (BuildContext context, int index) =>
-            paper("title", "2022-03-12", size.width * 1),
+        itemBuilder: (BuildContext context, int index) => paper(
+            FileDTO("folderCP", "fileId", "lastChangedDate", "subheadEWS",
+                "contentsEWS"),
+            size.width * 1),
       ),
     );
   }
 
-  Widget paper(String title, String lastChanged, double width) {
+  Widget paper(FileDTO fileDTO, double width) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: width * 0.025),
-      child: BorderCard(
-        childWidget: Padding(
-          padding:
-              EdgeInsets.symmetric(vertical: 5.0, horizontal: width * 0.025),
-          child: BorderCard.contentsOfContents(
-            Image.asset(
-              "images/file.png",
-              color: Colors.white,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (_) => FielPage()));
+        },
+        child: BorderCard(
+          childWidget: Padding(
+            padding:
+                EdgeInsets.symmetric(vertical: 5.0, horizontal: width * 0.025),
+            child: BorderCard.contentsOfContents(
+              Image.asset(
+                "images/file.png",
+                color: Colors.white,
+              ),
+              fileDTO.subheadEWS,
+              fileDTO.lastChangedDate,
             ),
-            title,
-            lastChanged,
           ),
         ),
       ),
