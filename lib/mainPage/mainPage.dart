@@ -41,12 +41,18 @@ class _MyHomePageState extends State<MainPage> {
     setState(() {});
   }
 
+  final List<Widget> _authorityState = <Widget>[
+    const Text('  write-authority  '),
+    const Text('  read-authority  ')
+  ];
+  final List<bool> _selectedFruits = [true, false];
   bool initFinished = false;
   late SharedPreferences prefs;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   RSAKeyPairClass? _loginedKey;
   late ColorScheme scheme;
   late List<Map<String, dynamic>> _foldersInfo;
+  late Size size;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +60,7 @@ class _MyHomePageState extends State<MainPage> {
         Provider.of<LocalDatabaseProvider>(context, listen: true).foldersInfo;
     _loginedKey = Provider.of<AccountProvider>(context, listen: true).myAccount;
     scheme = Theme.of(context).colorScheme;
+    size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: const DrawerClass(),
@@ -89,8 +96,29 @@ class _MyHomePageState extends State<MainPage> {
         ],
       ),
       body: Center(
-        child: _loginedKey == null ? _accountButton() : _listViewBuilder(),
+        child: _loginedKey == null ? _accountButton() : _main(),
       ),
+    );
+  }
+
+  Widget _toggleButton() {
+    return ToggleButtons(
+      onPressed: (int index) {
+        setState(() {
+          for (int i = 0; i < _selectedFruits.length; i++) {
+            _selectedFruits[i] = i == index;
+          }
+        });
+      },
+      borderRadius: const BorderRadius.all(Radius.circular(30)),
+      textStyle: const TextStyle(fontWeight: FontWeight.bold),
+      selectedBorderColor: Colors.black,
+      selectedColor: Colors.white,
+      fillColor: Colors.grey,
+      color: Colors.grey,
+      isSelected: _selectedFruits,
+      constraints: BoxConstraints(minHeight: size.height * 0.04),
+      children: _authorityState,
     );
   }
 
@@ -143,14 +171,25 @@ class _MyHomePageState extends State<MainPage> {
     );
   }
 
+  Widget _main() {
+    return Column(
+      children: [
+        _toggleButton(),
+        _listViewBuilder(),
+      ],
+    );
+  }
+
   Widget _listViewBuilder() {
-    return ListView.builder(
-      itemCount: _foldersInfo.length,
-      itemBuilder: (BuildContext context, int idx) => FolderCard(
-        title: _foldersInfo[idx]["title"],
-        publicKey: _foldersInfo[idx]["publicKey"],
-        lastChangedDate: _foldersInfo[idx]["lastChanged"],
-        privateKey: _foldersInfo[idx]["privateKey"],
+    return Expanded(
+      child: ListView.builder(
+        itemCount: _foldersInfo.length,
+        itemBuilder: (BuildContext context, int idx) => FolderCard(
+          title: _foldersInfo[idx]["title"],
+          publicKey: _foldersInfo[idx]["publicKey"],
+          lastChangedDate: _foldersInfo[idx]["lastChanged"],
+          privateKey: _foldersInfo[idx]["privateKey"],
+        ),
       ),
     );
   }

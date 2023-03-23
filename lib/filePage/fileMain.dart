@@ -1,5 +1,6 @@
 import 'package:cryptofile/designClass/borderCard.dart';
 import 'package:cryptofile/dto/fileDTO.dart';
+import 'package:cryptofile/file/fileClass.dart';
 import 'package:cryptofile/filePage/filePage.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +47,12 @@ class _PaperMainState extends State<FileMain> {
       child: InkWell(
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (_) => FielPage()));
+              context,
+              MaterialPageRoute(
+                  builder: (_) => FilePage(
+                        fileClass: FileClass("folderCP", "fileId",
+                            "lastChangedDate", "subhead", "contents"),
+                      )));
         },
         child: BorderCard(
           childWidget: Padding(
