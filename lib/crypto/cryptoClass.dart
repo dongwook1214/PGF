@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:aes_crypt/aes_crypt.dart';
 import 'package:convert/convert.dart';
+import 'package:cryptofile/crypto/aesKeyClass.dart';
 import 'package:rsa_encrypt/rsa_encrypt.dart';
 import 'package:pointycastle/export.dart' as pointycastleCrypto;
 import 'package:crypto/crypto.dart' as crypto;
@@ -28,7 +30,17 @@ class CryptoClass {
     RsaKeyHelper helper = RsaKeyHelper();
     pointycastleCrypto.RSAPublicKey publicKey =
         helper.parsePublicKeyFromPem(publicKeyPem);
-    String encryptedText = encrypt(plainText, publicKey);
+    int i = 0;
+    int subNum = plainText.length ~/ 256;
+    String encryptedText = "";
+    for (i; i < subNum; ++i) {
+      String stringToEncrypt = plainText.substring(i * 256, i * 256 + 256);
+      encryptedText += encrypt(stringToEncrypt, publicKey);
+    }
+    if (plainText.length % 256 != 0) {
+      String stringToEncrypt = plainText.substring(i * 256);
+      encryptedText += encrypt(stringToEncrypt, publicKey);
+    }
     return encryptedText;
   }
 
@@ -49,8 +61,28 @@ class CryptoClass {
     RsaKeyHelper helper = RsaKeyHelper();
     pointycastleCrypto.RSAPrivateKey privateKey =
         helper.parsePrivateKeyFromPem(privateKeyPem);
-    String decryptedText = decrypt(encryptedText, privateKey);
+    int subNum = encryptedText.length ~/ 256;
+    print(subNum);
+    String decryptedText = "";
+    for (int i = 0; i < subNum; ++i) {
+      String stringToDecrypt = encryptedText.substring(i * 256, i * 256 + 256);
+      decryptedText += decrypt(stringToDecrypt, privateKey);
+    }
     return decryptedText;
+  }
+
+  static String symmetricEncryptData(AesKeyClass key, String plainText) {
+    AesCrypt crypt = key.crypt;
+    String encrypted = String.fromCharCodes(
+        crypt.aesEncrypt(Uint8List.fromList(plainText.codeUnits)));
+    return encrypted;
+  }
+
+  static String symmetricDecryptData(AesKeyClass key, String encryptedText) {
+    AesCrypt crypt = key.crypt;
+    String decrypted = String.fromCharCodes(
+        crypt.aesDecrypt(Uint8List.fromList(encryptedText.codeUnits)));
+    return decrypted;
   }
 
   Future<Uint8List> _readFileByte(String filePath) async {
@@ -66,24 +98,4 @@ class CryptoClass {
     });
     return bytes;
   }
-
-  static String sha256hash(String str) {
-    List<int> bytes = utf8.encode(str);
-    crypto.Digest digest = crypto.sha256.convert(bytes);
-    return base64Encode(digest.bytes);
-  }
-
-  // RSAKeyPairClass keyPair = await CryptoClass.createKeyPair();
-  //             pointycastleCrypto.RSAPrivateKey tempPrivateKey = keyPair.privateKey;
-  //             pointycastleCrypto.RSAPublicKey tempPublicKey = keyPair.publicKey;
-
-  //             Uint8List byteData = (await rootBundle.load("images/key.png"))
-  //                 .buffer
-  //                 .asUint8List();
-  //             String str =
-  //                 CryptoClass.encryptData(tempPublicKey, byteData.toString());
-  //             String decodedStr = CryptoClass.decryptData(tempPrivateKey, str);
-  //             List<int> tempDecrypt = json.decode(decodedStr).cast<int>();
-  //             Uint8List t = Uint8List.fromList(tempDecrypt);
-  //             Image _image = Image.memory(t);
 }

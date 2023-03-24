@@ -2,7 +2,9 @@ import 'package:cryptofile/designClass/borderCard.dart';
 import 'package:cryptofile/dto/fileDTO.dart';
 import 'package:cryptofile/file/fileClass.dart';
 import 'package:cryptofile/filePage/filePage.dart';
+import 'package:cryptofile/provider/darkModeProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FileMain extends StatefulWidget {
   String title;
@@ -61,7 +63,10 @@ class _PaperMainState extends State<FileMain> {
             child: BorderCard.contentsOfContents(
               Image.asset(
                 "images/file.png",
-                color: Colors.white,
+                color: Provider.of<DarkModeProvider>(context, listen: false)
+                        .isDarkMode
+                    ? Colors.white
+                    : Colors.black,
               ),
               fileDTO.subheadEWS,
               fileDTO.lastChangedDate,

@@ -12,15 +12,48 @@ class FilePage extends StatefulWidget {
 }
 
 class _FielPageState extends State<FilePage> {
+  late ColorScheme scheme;
+  late Size size;
+  final TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    scheme = Theme.of(context).colorScheme;
+    size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.check),
+          ),
+        ],
         title: Text(widget.fileClass.subhead),
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: scheme.onBackground,
+          ),
+        ),
       ),
-      body: Column(
-        children: [],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            textField(),
+            Container(height: size.height * 0.5),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget textField() {
+    return TextField(
+      keyboardType: TextInputType.multiline,
+      textInputAction: TextInputAction.newline,
+      maxLines: null,
+      controller: textEditingController,
     );
   }
 }

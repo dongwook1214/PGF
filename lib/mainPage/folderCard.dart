@@ -26,11 +26,13 @@ class FolderCard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => FileMain(
-                        title: title,
-                      )));
+            context,
+            MaterialPageRoute(
+              builder: (_) => FileMain(
+                title: title,
+              ),
+            ),
+          );
         },
         onLongPress: () {},
         child: ContextMenuRegion(
@@ -79,9 +81,10 @@ class FolderCard extends StatelessWidget {
           Column(
             children: [
               BorderCard.contentsOfContents(
-                  Image.asset("images/treasureBox.png"),
-                  "public key",
-                  CryptoClass.sha256hash(publicKey)),
+                Image.asset("images/treasureBox.png"),
+                "public key",
+                "CryptoClass.sha256hash(publicKey)",
+              ),
               BorderCard.contentsOfContents(Image.asset("images/schedule.png"),
                   "last changed", lastChangedDate.substring(0, 10)),
             ],

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:pointycastle/export.dart' as pointycastleCrypto;
 import 'package:rsa_encrypt/rsa_encrypt.dart';
+import 'package:crypto/crypto.dart' as crypto;
 
 class RSAKeyPairClass {
   late pointycastleCrypto.RSAPrivateKey privateKey;
@@ -24,6 +25,12 @@ class RSAKeyPairClass {
     return cryptoKeyPair;
   }
 
+  String getCompressedPublicKeyString() {
+    List<int> bytes = utf8.encode(getPublicKeyString());
+    crypto.Digest digest = crypto.sha256.convert(bytes);
+    return base64Encode(digest.bytes);
+  }
+
   String getPrivateKeyString() {
     RsaKeyHelper helper = RsaKeyHelper();
     return helper.encodePrivateKeyToPemPKCS8(privateKey);
@@ -34,9 +41,9 @@ class RSAKeyPairClass {
     return helper.encodePublicKeyToPemPKCS8(publicKey);
   }
 
-  String getPrivateKeyBase64Pem() {
+  String getPublicKeyBase64Pem() {
     RsaKeyHelper helper = RsaKeyHelper();
-    String pem = helper.encodePrivateKeyToPemPKCS1(privateKey);
+    String pem = helper.encodePublicKeyToPemPKCS8(publicKey);
     return base64Encode(helper.removePemHeaderAndFooter(pem).codeUnits);
   }
 
