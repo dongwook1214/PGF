@@ -1,9 +1,9 @@
-import 'package:cryptofile/provider/darkModeProvider.dart';
+import 'package:cryptofile/controller/provider/darkModeProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:slidable_button/slidable_button.dart';
 import '../designClass/titleAndDescriptionFormat.dart';
-import '../provider/sharedPreferencesProvider.dart';
+import '../../controller/provider/sharedPreferencesProvider.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});

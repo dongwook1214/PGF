@@ -1,4 +1,4 @@
-import 'package:cryptofile/file/fileClass.dart';
+import 'package:cryptofile/model/file/fileClass.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';

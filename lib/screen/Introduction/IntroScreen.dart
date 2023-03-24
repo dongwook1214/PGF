@@ -1,5 +1,5 @@
-import 'package:cryptofile/mainPage/mainPage.dart';
-import 'package:cryptofile/provider/sharedPreferencesProvider.dart';
+import 'package:cryptofile/screen/mainPage/mainPage.dart';
+import 'package:cryptofile/controller/provider/sharedPreferencesProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';

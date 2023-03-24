@@ -1,5 +1,5 @@
-import 'package:cryptofile/crypto/aesKeyClass.dart';
-import 'package:cryptofile/crypto/cryptoClass.dart';
+import 'package:cryptofile/model/crypto/aesKeyClass.dart';
+import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,7 +1,7 @@
-import 'package:cryptofile/dto/generateFolderDTO.dart';
+import 'package:cryptofile/model/dto/generateFolderDTO.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cryptofile/dioHandling/dioHandling.dart';
+import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 
 void main() {
   test("stream test", () async {

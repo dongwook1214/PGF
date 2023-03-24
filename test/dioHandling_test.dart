@@ -1,12 +1,12 @@
-import 'package:cryptofile/dto/addSubscribeDemandDTO.dart';
-import 'package:cryptofile/dto/addWriteAuthorityDTO.dart';
-import 'package:cryptofile/dto/allowSubscribeDTO.dart';
-import 'package:cryptofile/dto/generateFileDTO.dart';
-import 'package:cryptofile/dto/generateFolderDTO.dart';
-import 'package:cryptofile/dto/modifyFileDTO.dart';
+import 'package:cryptofile/model/dto/addSubscribeDemandDTO.dart';
+import 'package:cryptofile/model/dto/addWriteAuthorityDTO.dart';
+import 'package:cryptofile/model/dto/allowSubscribeDTO.dart';
+import 'package:cryptofile/model/dto/generateFileDTO.dart';
+import 'package:cryptofile/model/dto/generateFolderDTO.dart';
+import 'package:cryptofile/model/dto/modifyFileDTO.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cryptofile/dioHandling/dioHandling.dart';
+import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 
 void main() {
   test("singleton test", () {

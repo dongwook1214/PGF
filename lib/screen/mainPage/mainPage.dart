@@ -1,16 +1,16 @@
-import 'package:cryptofile/crypto/cryptoClass.dart';
-import 'package:cryptofile/crypto/RSAKeyPairClass.dart';
-import 'package:cryptofile/designClass/dialogFormat.dart';
-import 'package:cryptofile/drawer/drawerClass.dart';
-import 'package:cryptofile/mainPage/importAccountDialog.dart';
-import 'package:cryptofile/provider/accountProvider.dart';
-import 'package:cryptofile/provider/localDatabaseProvider.dart';
-import 'package:cryptofile/provider/sharedPreferencesProvider.dart';
-import 'package:cryptofile/settingPage/settingPage.dart';
+import 'package:cryptofile/model/crypto/cryptoClass.dart';
+import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
+import 'package:cryptofile/screen/designClass/dialogFormat.dart';
+import 'package:cryptofile/screen/drawer/drawerClass.dart';
+import 'package:cryptofile/screen/mainPage/importAccountDialog.dart';
+import 'package:cryptofile/controller/provider/accountProvider.dart';
+import 'package:cryptofile/controller/provider/localDatabaseProvider.dart';
+import 'package:cryptofile/controller/provider/sharedPreferencesProvider.dart';
+import 'package:cryptofile/screen/settingPage/settingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../designClass/snackBarFormat.dart';
+import 'package:cryptofile/screen/designClass/snackBarFormat.dart';
 import 'folderCard.dart';
 
 class MainPage extends StatefulWidget {
@@ -32,10 +32,10 @@ class _MyHomePageState extends State<MainPage> {
     prefs =
         Provider.of<SharedPreferencesProvider>(context, listen: false).prefs;
 
-    await Provider.of<LocalDatabaseProvider>(context, listen: false)
-        .setLocalDatabase();
-    await Provider.of<LocalDatabaseProvider>(context, listen: false)
-        .initFoldersInfo();
+    // await Provider.of<LocalDatabaseProvider>(context, listen: false)
+    //     .setLocalDatabase();
+    // await Provider.of<LocalDatabaseProvider>(context, listen: false)
+    //     .initFoldersInfo();
     Provider.of<AccountProvider>(context, listen: false).initLogin(prefs);
     initFinished = true;
     setState(() {});
@@ -56,8 +56,9 @@ class _MyHomePageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    _foldersInfo =
-        Provider.of<LocalDatabaseProvider>(context, listen: true).foldersInfo;
+    _foldersInfo = [];
+    // _foldersInfo =
+    //     Provider.of<LocalDatabaseProvider>(context, listen: true).foldersInfo;
     _loginedKey = Provider.of<AccountProvider>(context, listen: true).myAccount;
     scheme = Theme.of(context).colorScheme;
     size = MediaQuery.of(context).size;

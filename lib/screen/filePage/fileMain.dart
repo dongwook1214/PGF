@@ -1,8 +1,8 @@
-import 'package:cryptofile/designClass/borderCard.dart';
-import 'package:cryptofile/dto/fileDTO.dart';
-import 'package:cryptofile/file/fileClass.dart';
-import 'package:cryptofile/filePage/filePage.dart';
-import 'package:cryptofile/provider/darkModeProvider.dart';
+import 'package:cryptofile/model/dto/fileDTO.dart';
+import 'package:cryptofile/model/file/fileClass.dart';
+import 'package:cryptofile/screen/designClass/borderCard.dart';
+import 'package:cryptofile/screen/filePage/filePage.dart';
+import 'package:cryptofile/controller/provider/darkModeProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,14 +1,14 @@
-import 'package:cryptofile/dto/addSubscribeDemandDTO.dart';
-import 'package:cryptofile/dto/addWriteAuthorityDTO.dart';
-import 'package:cryptofile/dto/allowSubscribeDTO.dart';
-import 'package:cryptofile/dto/generateFileDTO.dart';
-import 'package:cryptofile/dto/generateFolderDTO.dart';
-import 'package:cryptofile/dto/modifyFileDTO.dart';
-import 'package:cryptofile/dto/searchContentsDTO.dart';
+import 'package:cryptofile/model/dto/addSubscribeDemandDTO.dart';
+import 'package:cryptofile/model/dto/addWriteAuthorityDTO.dart';
+import 'package:cryptofile/model/dto/allowSubscribeDTO.dart';
+import 'package:cryptofile/model/dto/generateFileDTO.dart';
+import 'package:cryptofile/model/dto/generateFolderDTO.dart';
+import 'package:cryptofile/model/dto/modifyFileDTO.dart';
+import 'package:cryptofile/model/dto/searchContentsDTO.dart';
 import 'package:dio/dio.dart';
-import 'package:cryptofile/dto/fileDTO.dart';
-import 'package:cryptofile/dto/readAuthorityFolderDTO.dart';
-import 'package:cryptofile/dto/writeAuthorityFolderDTO.dart';
+import 'package:cryptofile/model/dto/fileDTO.dart';
+import 'package:cryptofile/model/dto/readAuthorityFolderDTO.dart';
+import 'package:cryptofile/model/dto/writeAuthorityFolderDTO.dart';
 
 class DioHandling {
   DioHandling._privateConstructor();

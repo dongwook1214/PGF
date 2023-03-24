@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:aes_crypt/aes_crypt.dart';
 import 'package:convert/convert.dart';
-import 'package:cryptofile/crypto/aesKeyClass.dart';
+import 'package:cryptofile/model/crypto/aesKeyClass.dart';
 import 'package:rsa_encrypt/rsa_encrypt.dart';
 import 'package:pointycastle/export.dart' as pointycastleCrypto;
 import 'package:crypto/crypto.dart' as crypto;

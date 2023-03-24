@@ -1,6 +1,6 @@
-import 'package:cryptofile/crypto/cryptoClass.dart';
+import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:flutter/material.dart';
-import 'package:cryptofile/crypto/RSAKeyPairClass.dart';
+import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rsa_encrypt/rsa_encrypt.dart';

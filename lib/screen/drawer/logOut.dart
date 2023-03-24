@@ -1,5 +1,5 @@
-import 'package:cryptofile/provider/accountProvider.dart';
-import 'package:cryptofile/provider/sharedPreferencesProvider.dart';
+import 'package:cryptofile/controller/provider/accountProvider.dart';
+import 'package:cryptofile/controller/provider/sharedPreferencesProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../designClass/dialogFormat.dart';

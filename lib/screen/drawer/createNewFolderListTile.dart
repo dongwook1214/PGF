@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import '../designClass/dialogFormat.dart';
 import 'package:rsa_encrypt/rsa_encrypt.dart';
-import '../crypto/cryptoClass.dart';
-import '../provider/localDatabaseProvider.dart';
-import '../sqfLiteHandling/sqfLiteHandling.dart';
-import 'package:cryptofile/crypto/RSAKeyPairClass.dart';
+import '../../model/crypto/cryptoClass.dart';
+import '../../controller/provider/localDatabaseProvider.dart';
+import '../../model/sqfLiteHandling/sqfLiteHandling.dart';
+import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
 
 class CreateNewFolderListTile extends StatefulWidget {
   const CreateNewFolderListTile({super.key});
@@ -23,34 +23,30 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
   bool isNameOpen = false;
   @override
   Widget build(BuildContext context) {
-    return Consumer<LocalDatabaseProvider>(
-      builder: (context, value, child) {
-        return ListTile(
-          title: const Text('Create New Folder'),
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (_) => StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) =>
-                    DialogFormat(
-                  isLackOfSpace: true,
-                  image: Image.asset("images/treasureBox.png"),
-                  tempTitle: "Create New Folder",
-                  tempDescription: "Private keys are only stored locally!",
-                  childWidget: _childWidget(setState),
-                  okFunction: () async {
-                    if (validateCheck()) {
-                      Database db = value.localDatabase;
-                      await _onOkFunction(db);
-                      await value.refreshFoldersInfo();
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-              ),
-            );
-          },
+    return ListTile(
+      title: const Text('Create New Folder'),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (_) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) =>
+                DialogFormat(
+              isLackOfSpace: true,
+              image: Image.asset("images/treasureBox.png"),
+              tempTitle: "Create New Folder",
+              tempDescription: "Private keys are only stored locally!",
+              childWidget: _childWidget(setState),
+              okFunction: () async {
+                if (validateCheck()) {
+                  // Database db = value.localDatabase;
+                  // await _onOkFunction(db);
+                  // await value.refreshFoldersInfo();
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }
+              },
+            ),
+          ),
         );
       },
     );

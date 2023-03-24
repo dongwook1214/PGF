@@ -1,11 +1,11 @@
-import 'package:cryptofile/designClass/snackBarFormat.dart';
+import 'package:cryptofile/screen/designClass/snackBarFormat.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../crypto/cryptoClass.dart';
-import '../crypto/RSAKeyPairClass.dart';
-import '../designClass/dialogFormat.dart';
-import '../provider/accountProvider.dart';
+import '../../model/crypto/cryptoClass.dart';
+import '../../model/crypto/RSAKeyPairClass.dart';
+import 'package:cryptofile/screen/designClass/dialogFormat.dart';
+import '../../controller/provider/accountProvider.dart';
 
 class ImportAccountDialog extends StatefulWidget {
   final SharedPreferences prefs;

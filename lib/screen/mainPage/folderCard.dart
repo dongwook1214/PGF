@@ -1,7 +1,7 @@
 import 'package:context_menus/context_menus.dart';
-import 'package:cryptofile/crypto/cryptoClass.dart';
-import 'package:cryptofile/designClass/borderCard.dart';
-import 'package:cryptofile/filePage/fileMain.dart';
+import 'package:cryptofile/model/crypto/cryptoClass.dart';
+import 'package:cryptofile/screen/designClass/borderCard.dart';
+import 'package:cryptofile/screen/filePage/fileMain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
