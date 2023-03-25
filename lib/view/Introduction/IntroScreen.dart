@@ -1,9 +1,8 @@
-import 'package:cryptofile/screen/mainPage/mainPage.dart';
-import 'package:cryptofile/controller/provider/sharedPreferencesProvider.dart';
+import 'package:cryptofile/model/prefsHandling/prefsHandling.dart';
+import 'package:cryptofile/view/mainPage/mainPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:provider/provider.dart';
 
 class IntroScreen extends StatefulWidget {
   @override
@@ -66,10 +65,8 @@ class _IntroScreenState extends State<IntroScreen> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        await Provider.of<SharedPreferencesProvider>(context,
-                                listen: false)
-                            .prefs
-                            .setBool("isIntroComplete", true);
+                        PrefsHandling prefsHandling = PrefsHandling();
+                        prefsHandling.setIsIntroComplete(true);
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => MainPage()),

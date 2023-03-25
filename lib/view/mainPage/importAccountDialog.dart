@@ -1,15 +1,15 @@
-import 'package:cryptofile/screen/designClass/snackBarFormat.dart';
+import 'package:cryptofile/model/prefsHandling/prefsHandling.dart';
+import 'package:cryptofile/view/designClass/snackBarFormat.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../model/crypto/cryptoClass.dart';
 import '../../model/crypto/RSAKeyPairClass.dart';
-import 'package:cryptofile/screen/designClass/dialogFormat.dart';
-import '../../controller/provider/accountProvider.dart';
+import 'package:cryptofile/view/designClass/dialogFormat.dart';
+import '../../view_model/getx/accountGetX.dart';
 
 class ImportAccountDialog extends StatefulWidget {
-  final SharedPreferences prefs;
-  const ImportAccountDialog({super.key, required this.prefs});
+  const ImportAccountDialog({super.key});
 
   @override
   State<ImportAccountDialog> createState() => _ImportAccountDialogState();
@@ -40,9 +40,10 @@ class _ImportAccountDialogState extends State<ImportAccountDialog> {
     }
     RSAKeyPairClass keyPair = RSAKeyPairClass.fromPems(
         publicKeyController.text, privateKeyController.text);
-    await widget.prefs.setString("publicKey", keyPair.getPublicKeyString());
-    await widget.prefs.setString("privateKey", keyPair.getPrivateKeyString());
-    Provider.of<AccountProvider>(context, listen: false).login(widget.prefs);
+    PrefsHandling prefsHandling = PrefsHandling();
+    prefsHandling.setPublicAndPrivateKey(
+        keyPair.getPublicKeyString(), keyPair.getPrivateKeyString());
+    Get.find<AccountGetX>().login();
     welcome(context);
     Navigator.pop(context);
   }

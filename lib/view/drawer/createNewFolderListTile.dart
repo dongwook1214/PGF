@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:sqflite/sqflite.dart';
 import '../designClass/dialogFormat.dart';
 import 'package:rsa_encrypt/rsa_encrypt.dart';
 import '../../model/crypto/cryptoClass.dart';
-import '../../controller/provider/localDatabaseProvider.dart';
 import '../../model/sqfLiteHandling/sqfLiteHandling.dart';
 import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
 

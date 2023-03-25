@@ -1,7 +1,6 @@
-import 'package:cryptofile/controller/provider/accountProvider.dart';
-import 'package:cryptofile/controller/provider/sharedPreferencesProvider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import '../../view_model/getx/accountGetX.dart';
 import '../designClass/dialogFormat.dart';
 
 class LogOut extends StatefulWidget {
@@ -33,8 +32,7 @@ class _ImportExistingFolderState extends State<LogOut> {
   }
 
   Future logOutFounc() async {
-    Provider.of<AccountProvider>(context, listen: false).logOut(
-        Provider.of<SharedPreferencesProvider>(context, listen: false).prefs);
+    Get.find<AccountGetX>().login();
     Navigator.pop(context);
     Navigator.pop(context);
   }

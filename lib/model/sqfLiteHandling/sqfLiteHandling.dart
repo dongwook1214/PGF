@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-import '../../controller/provider/localDatabaseProvider.dart';
 
 class SqfLiteHandling {
   static Future<void> createNewFolder(

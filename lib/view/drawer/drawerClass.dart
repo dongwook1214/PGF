@@ -1,7 +1,7 @@
-import 'package:cryptofile/screen/drawer/contactUsClass.dart';
-import 'package:cryptofile/screen/drawer/howToUSe.dart';
-import 'package:cryptofile/screen/drawer/logOut.dart';
-import 'package:cryptofile/screen/drawer/searchFolderPage.dart';
+import 'package:cryptofile/view/drawer/contactUsClass.dart';
+import 'package:cryptofile/view/drawer/howToUSe.dart';
+import 'package:cryptofile/view/drawer/logOut.dart';
+import 'package:cryptofile/view/drawer/searchFolderPage.dart';
 import 'package:flutter/material.dart';
 import 'ImportExistingFolder.dart';
 import 'createNewFolderListTile.dart';

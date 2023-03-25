@@ -1,13 +1,11 @@
 import 'package:context_menus/context_menus.dart';
-import 'package:cryptofile/screen/Introduction/IntroScreen.dart';
-import 'package:cryptofile/controller/provider/accountProvider.dart';
-import 'package:cryptofile/controller/provider/darkModeProvider.dart';
-import 'package:cryptofile/controller/provider/localDatabaseProvider.dart';
-import 'package:cryptofile/controller/provider/sharedPreferencesProvider.dart';
+import 'package:cryptofile/view/Introduction/IntroScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'screen/mainPage/mainPage.dart';
+import 'model/prefsHandling/prefsHandling.dart';
+import 'view_model/getx/accountGetX.dart';
+import 'view/mainPage/mainPage.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 
 void main() {
@@ -25,43 +23,27 @@ class MyApp extends StatelessWidget {
       builder:
           (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
         if (snapshot.hasData) {
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (_) => AccountProvider()),
-              ChangeNotifierProvider(
-                  create: (_) => SharedPreferencesProvider(snapshot.data!)),
-              ChangeNotifierProvider(
-                  create: (_) => DarkModeProvider(isDarkMode(snapshot.data!))),
-              //ChangeNotifierProvider(create: (_) => LocalDatabaseProvider())
-            ],
-            child: Consumer<DarkModeProvider>(
-              builder: (context, value, child) {
-                return MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  title: 'PGF',
-                  theme: FlexThemeData.light(scheme: FlexScheme.brandBlue),
-                  darkTheme: FlexThemeData.dark(scheme: FlexScheme.brandBlue),
-                  themeMode:
-                      value.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-                  home: snapshot.data!.getBool('isIntroComplete') != true
-                      ? IntroScreen()
-                      : ContextMenuOverlay(child: const MainPage()),
-                );
-              },
-            ),
+          PrefsHandling prefsHandling = PrefsHandling();
+          prefsHandling.setSharedPreferences(snapshot.data!);
+          Get.put(AccountGetX());
+          Get.find<AccountGetX>().login();
+          return GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'PGF',
+            theme: FlexThemeData.light(scheme: FlexScheme.brandBlue),
+            darkTheme: FlexThemeData.dark(scheme: FlexScheme.brandBlue),
+            themeMode: prefsHandling.getIsDarkMode()
+                ? ThemeMode.dark
+                : ThemeMode.light,
+            home: prefsHandling.getIsIntroComplete()
+                ? ContextMenuOverlay(child: const MainPage())
+                : IntroScreen(),
           );
         } else {
           return const CircularProgressIndicator();
         }
       },
     );
-  }
-
-  bool isDarkMode(SharedPreferences pref) {
-    if (pref.getBool("isDarkMode") == null || !pref.getBool("isDarkMode")!) {
-      return false;
-    }
-    return true;
   }
 
   Future<SharedPreferences> getSharedPreference() async {

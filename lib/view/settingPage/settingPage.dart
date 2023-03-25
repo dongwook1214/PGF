@@ -1,9 +1,8 @@
-import 'package:cryptofile/controller/provider/darkModeProvider.dart';
+import 'package:cryptofile/model/prefsHandling/prefsHandling.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:slidable_button/slidable_button.dart';
 import '../designClass/titleAndDescriptionFormat.dart';
-import '../../controller/provider/sharedPreferencesProvider.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -54,11 +53,12 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget _darkModeButton() {
+    PrefsHandling prefsHandling = PrefsHandling();
+
     return HorizontalSlidableButton(
-      initialPosition:
-          Provider.of<DarkModeProvider>(context, listen: false).isDarkMode
-              ? SlidableButtonPosition.end
-              : SlidableButtonPosition.start,
+      initialPosition: prefsHandling.getIsDarkMode()
+          ? SlidableButtonPosition.end
+          : SlidableButtonPosition.start,
       width: MediaQuery.of(context).size.width * 0.15,
       buttonWidth: MediaQuery.of(context).size.width * 0.075,
       height: 30,
@@ -69,17 +69,13 @@ class _SettingPageState extends State<SettingPage> {
       buttonColor: scheme.onBackground,
       onChanged: (position) async {
         if (position == SlidableButtonPosition.end) {
-          Provider.of<DarkModeProvider>(context, listen: false)
-              .setIsDarkMode(true);
-          await Provider.of<SharedPreferencesProvider>(context, listen: false)
-              .prefs
-              .setBool("isDarkMode", true);
+          PrefsHandling prefsHandling = PrefsHandling();
+          await prefsHandling.setIsDarkMode(true);
+          Get.changeThemeMode(ThemeMode.dark);
         } else {
-          Provider.of<DarkModeProvider>(context, listen: false)
-              .setIsDarkMode(false);
-          await Provider.of<SharedPreferencesProvider>(context, listen: false)
-              .prefs
-              .setBool("isDarkMode", false);
+          PrefsHandling prefsHandling = PrefsHandling();
+          await prefsHandling.setIsDarkMode(false);
+          Get.changeThemeMode(ThemeMode.light);
         }
       },
     );

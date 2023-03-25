@@ -1,16 +1,12 @@
-import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
-import 'package:cryptofile/screen/designClass/dialogFormat.dart';
-import 'package:cryptofile/screen/drawer/drawerClass.dart';
-import 'package:cryptofile/screen/mainPage/importAccountDialog.dart';
-import 'package:cryptofile/controller/provider/accountProvider.dart';
-import 'package:cryptofile/controller/provider/localDatabaseProvider.dart';
-import 'package:cryptofile/controller/provider/sharedPreferencesProvider.dart';
-import 'package:cryptofile/screen/settingPage/settingPage.dart';
+import 'package:cryptofile/model/prefsHandling/prefsHandling.dart';
+import 'package:cryptofile/view_model/getx/accountGetX.dart';
+import 'package:cryptofile/view/drawer/drawerClass.dart';
+import 'package:cryptofile/view/mainPage/importAccountDialog.dart';
+import 'package:cryptofile/view/settingPage/settingPage.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cryptofile/screen/designClass/snackBarFormat.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:cryptofile/view/designClass/snackBarFormat.dart';
 import 'folderCard.dart';
 
 class MainPage extends StatefulWidget {
@@ -25,20 +21,6 @@ class _MyHomePageState extends State<MainPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _initStateMethod();
-  }
-
-  Future _initStateMethod() async {
-    prefs =
-        Provider.of<SharedPreferencesProvider>(context, listen: false).prefs;
-
-    // await Provider.of<LocalDatabaseProvider>(context, listen: false)
-    //     .setLocalDatabase();
-    // await Provider.of<LocalDatabaseProvider>(context, listen: false)
-    //     .initFoldersInfo();
-    Provider.of<AccountProvider>(context, listen: false).initLogin(prefs);
-    initFinished = true;
-    setState(() {});
   }
 
   final List<Widget> _authorityState = <Widget>[
@@ -47,9 +29,7 @@ class _MyHomePageState extends State<MainPage> {
   ];
   final List<bool> _selectedFruits = [true, false];
   bool initFinished = false;
-  late SharedPreferences prefs;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  RSAKeyPairClass? _loginedKey;
   late ColorScheme scheme;
   late List<Map<String, dynamic>> _foldersInfo;
   late Size size;
@@ -59,7 +39,7 @@ class _MyHomePageState extends State<MainPage> {
     _foldersInfo = [];
     // _foldersInfo =
     //     Provider.of<LocalDatabaseProvider>(context, listen: true).foldersInfo;
-    _loginedKey = Provider.of<AccountProvider>(context, listen: true).myAccount;
+    // _loginedKey = Provider.of<AccountProvider>(context, listen: true).myAccount;
     scheme = Theme.of(context).colorScheme;
     size = MediaQuery.of(context).size;
     return Scaffold(
@@ -83,21 +63,32 @@ class _MyHomePageState extends State<MainPage> {
               color: scheme.onBackground,
             ),
           ),
-          _loginedKey == null
-              ? const SizedBox.shrink()
-              : IconButton(
-                  onPressed: () {
-                    _scaffoldKey.currentState!.openEndDrawer();
-                  },
-                  icon: Icon(
-                    Icons.menu,
-                    color: scheme.onBackground,
-                  ),
-                ),
+          GetX<AccountGetX>(
+            builder: (controller) {
+              print(controller.myAccount.value);
+              return controller.myAccount.value == null
+                  ? const SizedBox.shrink()
+                  : IconButton(
+                      onPressed: () {
+                        _scaffoldKey.currentState!.openEndDrawer();
+                      },
+                      icon: Icon(
+                        Icons.menu,
+                        color: scheme.onBackground,
+                      ),
+                    );
+            },
+          ),
         ],
       ),
       body: Center(
-        child: _loginedKey == null ? _accountButton() : _main(),
+        child: GetX<AccountGetX>(
+          builder: (controller) {
+            return controller.myAccount.value == null
+                ? _accountButton()
+                : _main();
+          },
+        ),
       ),
     );
   }
@@ -140,9 +131,7 @@ class _MyHomePageState extends State<MainPage> {
       onPressed: () async {
         await showDialog(
           context: context,
-          builder: (_) => ImportAccountDialog(
-            prefs: prefs,
-          ),
+          builder: (_) => ImportAccountDialog(),
         );
       },
       child: const Text(
@@ -158,9 +147,10 @@ class _MyHomePageState extends State<MainPage> {
     return ElevatedButton(
       onPressed: () async {
         RSAKeyPairClass keyPair = await RSAKeyPairClass.createKeyPair();
-        await prefs.setString("publicKey", keyPair.getPublicKeyString());
-        await prefs.setString("privateKey", keyPair.getPrivateKeyString());
-        Provider.of<AccountProvider>(context, listen: false).login(prefs);
+        PrefsHandling prefsHandling = PrefsHandling();
+        prefsHandling.setPublicAndPrivateKey(
+            keyPair.getPublicKeyString(), keyPair.getPrivateKeyString());
+        //Provider.of<AccountProvider>(context, listen: false).login(prefs);
         welcome(context);
       },
       child: const Text(

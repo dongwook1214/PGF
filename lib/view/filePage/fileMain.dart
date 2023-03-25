@@ -1,10 +1,10 @@
 import 'package:cryptofile/model/dto/fileDTO.dart';
 import 'package:cryptofile/model/file/fileClass.dart';
-import 'package:cryptofile/screen/designClass/borderCard.dart';
-import 'package:cryptofile/screen/filePage/filePage.dart';
-import 'package:cryptofile/controller/provider/darkModeProvider.dart';
+import 'package:cryptofile/model/prefsHandling/prefsHandling.dart';
+import 'package:cryptofile/view/designClass/borderCard.dart';
+import 'package:cryptofile/view/filePage/filePage.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class FileMain extends StatefulWidget {
   String title;
@@ -44,17 +44,20 @@ class _PaperMainState extends State<FileMain> {
   }
 
   Widget paper(FileDTO fileDTO, double width) {
+    PrefsHandling prefsHandling = PrefsHandling();
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: width * 0.025),
       child: InkWell(
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => FilePage(
-                        fileClass: FileClass("folderCP", "fileId",
-                            "lastChangedDate", "subhead", "contents"),
-                      )));
+            context,
+            MaterialPageRoute(
+              builder: (_) => FilePage(
+                fileClass: FileClass("folderCP", "fileId", "lastChangedDate",
+                    "subhead", "contents"),
+              ),
+            ),
+          );
         },
         child: BorderCard(
           childWidget: Padding(
@@ -63,10 +66,8 @@ class _PaperMainState extends State<FileMain> {
             child: BorderCard.contentsOfContents(
               Image.asset(
                 "images/file.png",
-                color: Provider.of<DarkModeProvider>(context, listen: false)
-                        .isDarkMode
-                    ? Colors.white
-                    : Colors.black,
+                color:
+                    prefsHandling.getIsDarkMode() ? Colors.white : Colors.black,
               ),
               fileDTO.subheadEWS,
               fileDTO.lastChangedDate,
