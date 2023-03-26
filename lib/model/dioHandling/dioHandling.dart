@@ -22,7 +22,7 @@ class DioHandling {
 
   Future<String> generateFolder(GenerateFolderDTO dto, String folderCP) async {
     Response res = await dio.request(
-      "$baseUrl/api/v1/folders/$folderCP",
+      "$baseUrl/api/v1/folders/${Uri.encodeComponent(folderCP)}",
       data: dto,
       options: Options(method: 'POST', contentType: "application/json"),
     );
@@ -33,11 +33,11 @@ class DioHandling {
 
   Future<List<WriteAuthorityFolderDTO>> getWriteAuthByAccountCP(
       String accountCP) async {
+    print(Uri.encodeComponent(accountCP));
     Response res = await dio.request(
-      "$baseUrl/api/v1/write-auths/$accountCP/folders",
+      "$baseUrl/api/v1/write-auths/${Uri.encodeComponent(accountCP)}/folders",
       options: Options(method: 'GET'),
     );
-    print(res.data);
     List list = res.data;
     List<WriteAuthorityFolderDTO> writeAuthorityFolderList = [];
     for (int i = 0; i < list.length; ++i) {
@@ -57,7 +57,7 @@ class DioHandling {
   Future<List<ReadAuthorityFolderDTO>> getReadAuthByAccountCP(
       String accountCP) async {
     Response res = await dio.request(
-      "$baseUrl/api/v1/read-auths/$accountCP/folders",
+      "$baseUrl/api/v1/read-auths/${Uri.encodeComponent(accountCP)}/folders",
       options: Options(method: 'GET'),
     );
     print(res.data);
@@ -79,7 +79,7 @@ class DioHandling {
   Future<String> generateFile(
       String folderPublicKey, GenerateFileDTO dto) async {
     Response res = await dio.request(
-      "$baseUrl/api/v1/folders/$folderPublicKey/files",
+      "$baseUrl/api/v1/folders/${Uri.encodeComponent(folderPublicKey)}/files",
       data: dto,
       options: Options(method: 'POST', contentType: "application/json"),
     );
@@ -90,7 +90,7 @@ class DioHandling {
   Future<String> modifyFile(
       ModifyFileDTO dto, String folderPublickey, String fileId) async {
     Response res = await dio.request(
-      "$baseUrl/api/v1/folders/$folderPublickey/files/$fileId",
+      "$baseUrl/api/v1/folders/${Uri.encodeComponent(folderPublickey)}/files/$fileId",
       options: Options(method: 'PUT', contentType: "application/json"),
       data: dto,
     );
@@ -100,7 +100,7 @@ class DioHandling {
 
   Future<List<FileDTO>> getFileByFolderCP(String folderCP) async {
     Response res = await dio.request(
-      "$baseUrl/api/v1/folders/$folderCP/files",
+      "$baseUrl/api/v1/folders/${Uri.encodeComponent(folderCP)}/files",
       options: Options(method: 'GET'),
     );
     print(res.data);
@@ -139,7 +139,7 @@ class DioHandling {
 
   Future<List<String>> getSubscribeDemands(String folderCP) async {
     Response res = await dio.request(
-      "$baseUrl/api/v1/subscribe-demands?$folderCP",
+      "$baseUrl/api/v1/subscribe-demands?${Uri.encodeComponent(folderCP)}",
       options: Options(method: 'GET'),
     );
     print(res.data);
@@ -162,7 +162,7 @@ class DioHandling {
 
   Future<List> search(String keyword) async {
     Response res = await dio.request(
-      "$baseUrl/api/v1/folders?$keyword",
+      "$baseUrl/api/v1/folders?${Uri.encodeComponent(keyword)}",
       options: Options(method: 'GET'),
     );
     print(res.data);

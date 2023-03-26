@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'model/prefsHandling/prefsHandling.dart';
-import 'view_model/getx/accountGetX.dart';
 import 'view/mainPage/mainPage.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:cryptofile/view_model/getx/from_model/accountGetX.dart';
 
 void main() {
   runApp(const MyApp());

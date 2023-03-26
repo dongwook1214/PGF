@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../view_model/getx/accountGetX.dart';
+import '../../view_model/getx/from_model/accountGetX.dart';
 import '../designClass/dialogFormat.dart';
 
 class LogOut extends StatefulWidget {
@@ -32,7 +32,7 @@ class _ImportExistingFolderState extends State<LogOut> {
   }
 
   Future logOutFounc() async {
-    Get.find<AccountGetX>().login();
+    Get.find<AccountGetX>().logOut();
     Navigator.pop(context);
     Navigator.pop(context);
   }

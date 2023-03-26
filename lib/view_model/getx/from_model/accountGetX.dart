@@ -4,26 +4,23 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountGetX extends GetxController {
-  Rx<RSAKeyPairClass?> myAccount = null.obs;
+  RSAKeyPairClass? myAccount = null;
 
-  void initLogin() {
+  void login() {
     PrefsHandling prefsHandling = PrefsHandling();
     SharedPreferences prefs = prefsHandling.getSharedPreferences();
     String? publicKey = prefs.getString("publicKey");
     String? privateKey = prefs.getString("privateKey");
 
-    myAccount = publicKey != null
-        ? RSAKeyPairClass.fromPems(publicKey, privateKey!).obs
-        : null.obs;
+    if (publicKey == null || privateKey == null) {
+      myAccount = null;
+    } else {
+      myAccount = RSAKeyPairClass.fromPems(publicKey, privateKey);
+    }
+
     print("init login finish");
     print(
-        "login info: ${myAccount.value == null ? "null" : myAccount.value!.getCompressedPublicKeyString()}");
-  }
-
-  void login() {
-    PrefsHandling prefsHandling = PrefsHandling();
-    SharedPreferences prefs = prefsHandling.getSharedPreferences();
-    initLogin();
+        "login info: ${myAccount == null ? "null" : myAccount!.getCompressedPublicKeyString()}");
     update();
   }
 

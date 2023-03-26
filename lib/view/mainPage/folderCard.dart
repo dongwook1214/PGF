@@ -1,22 +1,24 @@
 import 'package:context_menus/context_menus.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
+import 'package:cryptofile/model/folder/folderClass.dart';
+import 'package:cryptofile/model/folder/readAuthorityFolderClass.dart';
+import 'package:cryptofile/model/folder/writeAuthorityFolderClass.dart';
 import 'package:cryptofile/view/designClass/borderCard.dart';
 import 'package:cryptofile/view/filePage/fileMain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FolderCard extends StatelessWidget {
-  final String title;
-  final String publicKey;
-  final String privateKey;
-  final String lastChangedDate;
+  final FolderClass folder;
+  // final String title;
+  // final String publicKey;
+  // final String privateKey;
+  // final String lastChangedDate;
 
-  const FolderCard(
-      {super.key,
-      required this.title,
-      required this.publicKey,
-      required this.lastChangedDate,
-      required this.privateKey});
+  const FolderCard({
+    super.key,
+    required this.folder,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class FolderCard extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => FileMain(
-                title: title,
+                title: folder.getTitle(),
               ),
             ),
           );
@@ -63,7 +65,7 @@ class FolderCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                title,
+                folder.getTitle(),
                 style: const TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
@@ -83,10 +85,10 @@ class FolderCard extends StatelessWidget {
               BorderCard.contentsOfContents(
                 Image.asset("images/treasureBox.png"),
                 "public key",
-                "CryptoClass.sha256hash(publicKey)",
+                folder.getFolderCP(),
               ),
               BorderCard.contentsOfContents(Image.asset("images/schedule.png"),
-                  "last changed", lastChangedDate.substring(0, 10)),
+                  "last changed", folder.getLastChangedDate().substring(0, 10)),
             ],
           )
         ],
@@ -97,7 +99,7 @@ class FolderCard extends StatelessWidget {
   void copyFunction(BuildContext context) {
     Clipboard.setData(ClipboardData(
         text:
-            "title:${title} \npublicKey:\n${publicKey} \nprivateKey:\n${privateKey}"));
+            "title:${folder.getTitle()} \npublicKey:\n${folder.getPublicKey()} \nprivateKey:\n${folder.getPrivateKey()}"));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text(

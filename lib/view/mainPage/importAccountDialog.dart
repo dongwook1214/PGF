@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../model/crypto/cryptoClass.dart';
 import '../../model/crypto/RSAKeyPairClass.dart';
 import 'package:cryptofile/view/designClass/dialogFormat.dart';
-import '../../view_model/getx/accountGetX.dart';
+import '../../view_model/getx/from_model/accountGetX.dart';
+import '../../view_model/getx/from_model/accountGetX.dart';
 
 class ImportAccountDialog extends StatefulWidget {
   const ImportAccountDialog({super.key});
@@ -41,7 +42,7 @@ class _ImportAccountDialogState extends State<ImportAccountDialog> {
     RSAKeyPairClass keyPair = RSAKeyPairClass.fromPems(
         publicKeyController.text, privateKeyController.text);
     PrefsHandling prefsHandling = PrefsHandling();
-    prefsHandling.setPublicAndPrivateKey(
+    await prefsHandling.setPublicAndPrivateKey(
         keyPair.getPublicKeyString(), keyPair.getPrivateKeyString());
     Get.find<AccountGetX>().login();
     welcome(context);

@@ -55,8 +55,9 @@ void main() {
   });
   test("dio getWriteAuthByAccountCP test", () async {
     DioHandling _instance = DioHandling();
-    var res = await _instance.getWriteAuthByAccountCP("123");
-    print(res);
+    var res = await _instance.getWriteAuthByAccountCP(
+        "1GxuSpqcnNPhT2gL!@=VvzVP7DG16qPLhUHHVngfy6ss/");
+    //print(res);
     expect(res.isEmpty, false);
   });
   test("dio getReadAuthByAccountCP test", () async {
