@@ -7,15 +7,19 @@ import 'model/prefsHandling/prefsHandling.dart';
 import 'view/mainPage/mainPage.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:cryptofile/view_model/getx/from_model/accountGetX.dart';
+import 'package:flutter/services.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

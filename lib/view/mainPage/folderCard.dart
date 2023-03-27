@@ -10,11 +10,6 @@ import 'package:flutter/services.dart';
 
 class FolderCard extends StatelessWidget {
   final FolderClass folder;
-  // final String title;
-  // final String publicKey;
-  // final String privateKey;
-  // final String lastChangedDate;
-
   const FolderCard({
     super.key,
     required this.folder,
@@ -38,20 +33,22 @@ class FolderCard extends StatelessWidget {
         },
         onLongPress: () {},
         child: ContextMenuRegion(
-          contextMenu: GenericContextMenu(
-            buttonConfigs: [
-              ContextMenuButtonConfig("copy",
-                  onPressed: () => copyFunction(context)),
-              ContextMenuButtonConfig("Hide folder", onPressed: () {}),
-              ContextMenuButtonConfig("Delete folder forever",
-                  onPressed: () {}),
-            ],
-          ),
+          contextMenu: _contextMenu(context),
           child: BorderCard(
             childWidget: cardContents(width),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _contextMenu(BuildContext context) {
+    return GenericContextMenu(
+      buttonConfigs: [
+        ContextMenuButtonConfig("copy", onPressed: () => copyFunction(context)),
+        ContextMenuButtonConfig("Hide folder", onPressed: () {}),
+        ContextMenuButtonConfig("Delete folder forever", onPressed: () {}),
+      ],
     );
   }
 
