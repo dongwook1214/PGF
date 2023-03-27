@@ -115,7 +115,6 @@ class DioHandling {
           list[i]["contentsEWS"]);
       fileList.add(file);
     }
-
     return fileList;
   }
 

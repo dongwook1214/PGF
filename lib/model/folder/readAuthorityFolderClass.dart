@@ -1,13 +1,14 @@
 import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
 import 'package:cryptofile/model/dto/readAuthorityFolderDTO.dart';
 import 'package:cryptofile/model/folder/folderClass.dart';
+import 'package:intl/intl.dart';
 
 class ReadAuthorityFolderClass implements FolderClass {
   late String folderCP;
   late bool isTitleOpen;
   late String title;
   late String symmetricKey;
-  late String lastChangedDate;
+  late DateTime lastChangedDate;
 
   ReadAuthorityFolderClass(this.folderCP, this.isTitleOpen, this.title,
       this.symmetricKey, this.lastChangedDate);
@@ -18,7 +19,7 @@ class ReadAuthorityFolderClass implements FolderClass {
     isTitleOpen = dto.isTitleOpen;
     title = dto.title;
     symmetricKey = dto.symmetricKeyEWA;
-    lastChangedDate = dto.lastChangedDate;
+    lastChangedDate = DateTime.parse(dto.lastChangedDate);
   }
 
   @override
@@ -43,6 +44,6 @@ class ReadAuthorityFolderClass implements FolderClass {
 
   @override
   String getLastChangedDate() {
-    return lastChangedDate;
+    return DateFormat.yMMMd().format(lastChangedDate);
   }
 }

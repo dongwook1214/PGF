@@ -26,7 +26,7 @@ class FolderCard extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => FileMain(
-                title: folder.getTitle(),
+                folderClass: folder,
               ),
             ),
           );
@@ -85,7 +85,7 @@ class FolderCard extends StatelessWidget {
                 folder.getFolderCP(),
               ),
               BorderCard.contentsOfContents(Image.asset("images/schedule.png"),
-                  "last changed", folder.getLastChangedDate().substring(0, 10)),
+                  "last changed", folder.getLastChangedDate()),
             ],
           )
         ],

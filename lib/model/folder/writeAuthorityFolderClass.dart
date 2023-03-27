@@ -4,6 +4,7 @@ import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dto/writeAuthorityFolderDTO.dart';
 import 'package:cryptofile/model/folder/folderClass.dart';
+import 'package:intl/intl.dart';
 
 class WriteAuthorityFolderClass implements FolderClass {
   late String folderCP;
@@ -12,7 +13,7 @@ class WriteAuthorityFolderClass implements FolderClass {
   late bool isTitleOpen;
   late String title;
   late String symmetricKey;
-  late String lastChangedDate;
+  late DateTime lastChangedDate;
 
   WriteAuthorityFolderClass(
       this.folderCP,
@@ -35,7 +36,7 @@ class WriteAuthorityFolderClass implements FolderClass {
     //     folderPrivateKey, dto.symmetricKeyEWF);
     //title = isTitleOpen ? dto.title:CryptoClass.symmetricDecryptData(symmetricKey, dto.title);
     title = dto.title;
-    lastChangedDate = dto.lastChangedDate;
+    lastChangedDate = DateTime.parse(dto.lastChangedDate);
   }
 
   @override
@@ -60,6 +61,6 @@ class WriteAuthorityFolderClass implements FolderClass {
 
   @override
   String getLastChangedDate() {
-    return lastChangedDate;
+    return DateFormat.yMMMd().format(lastChangedDate);
   }
 }
