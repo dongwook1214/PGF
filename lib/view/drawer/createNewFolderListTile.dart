@@ -3,6 +3,7 @@ import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 import 'package:cryptofile/model/dto/addWriteAuthorityDTO.dart';
 import 'package:cryptofile/model/dto/generateFolderDTO.dart';
+import 'package:cryptofile/view/designClass/snackBarFormat.dart';
 import 'package:cryptofile/view_model/getx/from_model/accountGetX.dart';
 import 'package:cryptofile/view_model/getx/from_view/createNewFolderListTileGetX.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,8 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
     dioHandling.generateFolder(
         generateFolderDTO, rsaKeyPairClass.getCompressedPublicKeyString());
     dioHandling.addWriteAuthority(addWriteAuthorityDTO);
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBarFormat(Text("folder is created! Try refresh"), context));
     goBack();
   }
 

@@ -27,8 +27,6 @@ class AesKeyClass {
     key =
         Uint8List.fromList(List<int>.generate(32, (i) => random.nextInt(256)));
     iv = Uint8List.fromList(List<int>.generate(16, (i) => random.nextInt(256)));
-    print(key);
-    print(iv);
     crypt.aesSetKeys(key, iv);
   }
   String getAesKeyString() {

@@ -162,7 +162,6 @@ class DioHandling {
       options: Options(method: 'POST', contentType: "application/json"),
       data: dto,
     );
-    print(res.data);
   }
 
   Future<List> search(String keyword) async {
