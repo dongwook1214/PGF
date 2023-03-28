@@ -98,13 +98,13 @@ class CryptoClass {
   }
 
   static Uint8List padding(Uint8List list) {
-    if (list.length % 16 == 0) {
-      return list;
+    List<int> copiedList = List.from(list);
+    while (copiedList.length % 16 != 0) {
+      copiedList.add(0);
     }
-    while (list.length % 16 == 0) {
-      list.add(0);
-    }
-    return list;
+    print(copiedList);
+    print("length: " + copiedList.length.toString());
+    return Uint8List.fromList(copiedList);
   }
 
   static String _toUtf8(String utf16Str) {

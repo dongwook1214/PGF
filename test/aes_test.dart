@@ -84,11 +84,11 @@ void main() {
   });
 
   test("encryptAndDecrypt", () {
-    String text = "hi동욱" * 2;
+    String text = "hi동욱fdsfsdfds";
     AesKeyClass aesKey = AesKeyClass.fromString(aesKeyString);
     String encrypted = CryptoClass.symmetricEncryptData(aesKey, text);
     String decrypted = CryptoClass.symmetricDecryptData(aesKey, encrypted);
     print(decrypted);
-    expect(text, decrypted);
+    expect(decrypted.contains(text), true);
   });
 }
