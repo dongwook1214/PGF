@@ -1,8 +1,9 @@
 import 'dart:async';
-
+import 'package:cryptofile/view_model/getx/from_model/searchContentsDTOGetX.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
 
 class SearchFolderPage extends StatefulWidget {
   const SearchFolderPage({super.key});
@@ -12,24 +13,11 @@ class SearchFolderPage extends StatefulWidget {
 }
 
 class _SearchFolderPageState extends State<SearchFolderPage> {
-  List<String> strList = [
-    "바보",
-    "멍청이",
-    "히힛",
-    "헤헷",
-    "흐흣",
-    "끼요",
-    "끼욧!",
-    "dsf",
-    "dsaf",
-    "aw",
-    "wawa",
-    "wa"
-  ];
   late ColorScheme scheme;
   StreamController streamCtrl = StreamController();
   @override
   Widget build(BuildContext context) {
+    Get.put(SearchContentsDTOGetX());
     double width = MediaQuery.of(context).size.width;
     scheme = Theme.of(context).colorScheme;
     return Scaffold(
@@ -50,7 +38,6 @@ class _SearchFolderPageState extends State<SearchFolderPage> {
       body: Column(
         children: [
           TextField(
-            //focusNode: _focus,
             keyboardType: TextInputType.text,
             onChanged: (text) {
               streamCtrl.add(text);
@@ -66,14 +53,21 @@ class _SearchFolderPageState extends State<SearchFolderPage> {
             child: StreamBuilder(
               stream: streamCtrl.stream,
               builder: (context, AsyncSnapshot snapshot) {
-                return ListView.builder(
-                  itemCount: snapshot.data == null
-                      ? 0
-                      : snapshot.data.toString().length,
-                  itemBuilder: (context, i) => ListTile(
-                    title: Text(snapshot.data.toString() + strList[i]),
-                  ),
-                );
+                Get.find<SearchContentsDTOGetX>()
+                    .setSearchedList(snapshot.data);
+                return GetBuilder<SearchContentsDTOGetX>(builder: (context) {
+                  return ListView.builder(
+                    itemCount:
+                        Get.find<SearchContentsDTOGetX>().searchedList.length,
+                    itemBuilder: (context, i) => ListTile(
+                      title: Text(Get.find<SearchContentsDTOGetX>()
+                          .searchedList[i]
+                          .title),
+                      subtitle: Text(
+                          "${Get.find<SearchContentsDTOGetX>().searchedList[i].folderCP.substring(0, 10)}..."),
+                    ),
+                  );
+                });
               },
             ),
           )

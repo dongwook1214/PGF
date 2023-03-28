@@ -144,7 +144,7 @@ class DioHandling {
 
   Future<List<String>> getSubscribeDemands(String folderCP) async {
     Response res = await dio.request(
-      "$baseUrl/api/v1/subscribe-demands?${Uri.encodeComponent(folderCP)}",
+      "$baseUrl/api/v1/subscribe-demands?folderCP=${Uri.encodeComponent(folderCP)}",
       options: Options(method: 'GET'),
     );
     print(res.data);
@@ -164,12 +164,12 @@ class DioHandling {
     );
   }
 
-  Future<List> search(String keyword) async {
+  Future<List<SearchContentsDTO>> search(String keyword) async {
     Response res = await dio.request(
-      "$baseUrl/api/v1/folders?${Uri.encodeComponent(keyword)}",
+      "$baseUrl/api/v1/folders?keyword=${Uri.encodeComponent(keyword)}",
       options: Options(method: 'GET'),
     );
-    print(res.data);
+    print(res);
     List list = res.data;
     List<SearchContentsDTO> searchList = [];
     for (int i = 0; i < list.length; ++i) {

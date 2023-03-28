@@ -61,7 +61,6 @@ class _ImportExistingFolderState extends State<ImportExistingFolder> {
     dioHandling.addWriteAuthority(addWriteAuthorityDTO);
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBarFormat(Text("folder is added! Try refresh"), context));
-
     goBack();
   }
 
