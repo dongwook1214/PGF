@@ -19,7 +19,8 @@ class ContactUsClass extends StatelessWidget {
             okFunction: () {
               Navigator.pop(context);
             },
-            tempDescription: "Email: dongwook1214@gmail.com",
+            tempDescription:
+                "Email: dongwook1214@gmail.com/nEmail: dlgurwls0529@gmail.com",
             tempTitle: 'Contact Us',
           ),
         );
