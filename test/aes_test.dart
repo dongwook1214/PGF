@@ -55,38 +55,29 @@ void main() {
     207,
     8
   ];
+  String aesKeyString = String.fromCharCodes(key + iv);
   test('make key test', () async {
     AesKeyClass aesKey = AesKeyClass.fromRandom();
   });
 
+  test("keyString test", () {
+    AesKeyClass aesKey = AesKeyClass.fromRandom();
+    String str = aesKey.getAesKeyString();
+    AesKeyClass aesKey2 = AesKeyClass.fromString(str);
+    expect(aesKey2.iv, aesKey.iv);
+    expect(aesKey2.key, aesKey.key);
+  });
+
   test('encrypt test', () {
-    AesKeyClass aesKey = AesKeyClass.fromString(
-        String.fromCharCodes(key), String.fromCharCodes(iv));
+    AesKeyClass aesKey = AesKeyClass.fromString(aesKeyString);
     String encrypted = CryptoClass.symmetricEncryptData(aesKey, "test" * 4);
-    expect(encrypted.length % 16, 0);
+    print(encrypted);
+    expect(encrypted.isNotEmpty, true);
   });
 
   test("decrypt test", () {
-    String encrypted = String.fromCharCodes([
-      90,
-      71,
-      164,
-      181,
-      94,
-      23,
-      251,
-      12,
-      16,
-      63,
-      198,
-      57,
-      192,
-      238,
-      238,
-      17
-    ]);
-    AesKeyClass aesKey = AesKeyClass.fromString(
-        String.fromCharCodes(key), String.fromCharCodes(iv));
+    String encrypted = "C9bMD82L1ggfrpm3jkJwnp";
+    AesKeyClass aesKey = AesKeyClass.fromString(aesKeyString);
     String decrypted = CryptoClass.symmetricDecryptData(aesKey, encrypted);
     print(decrypted);
     expect(decrypted, "test" * 4);
@@ -94,8 +85,7 @@ void main() {
 
   test("encryptAndDecrypt", () {
     String text = "hi동욱" * 2;
-    AesKeyClass aesKey = AesKeyClass.fromString(
-        String.fromCharCodes(key), String.fromCharCodes(iv));
+    AesKeyClass aesKey = AesKeyClass.fromString(aesKeyString);
     String encrypted = CryptoClass.symmetricEncryptData(aesKey, text);
     String decrypted = CryptoClass.symmetricDecryptData(aesKey, encrypted);
     print(decrypted);

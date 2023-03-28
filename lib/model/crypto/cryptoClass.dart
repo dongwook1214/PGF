@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:aes_crypt/aes_crypt.dart';
+import 'package:bs58/bs58.dart';
 import 'package:convert/convert.dart';
 import 'package:cryptofile/model/crypto/aesKeyClass.dart';
 import 'package:rsa_encrypt/rsa_encrypt.dart';
@@ -23,6 +24,7 @@ class CryptoClass {
       String stringToEncrypt = utf8PlainText.substring(i * 256);
       encryptedText += encrypt(stringToEncrypt, publicKey);
     }
+    encryptedText = base58.encode(Uint8List.fromList(encryptedText.codeUnits));
     return encryptedText;
   }
 
@@ -43,11 +45,14 @@ class CryptoClass {
       String stringToEncrypt = utf8PlainText.substring(i * 256);
       encryptedText += encrypt(stringToEncrypt, publicKey);
     }
+    encryptedText = base58.encode(Uint8List.fromList(encryptedText.codeUnits));
     return encryptedText;
   }
 
   static String asymmetricDecryptData(
-      pointycastleCrypto.RSAPrivateKey privateKey, String encryptedText) {
+      pointycastleCrypto.RSAPrivateKey privateKey, String encryptedTextbase58) {
+    String encryptedText =
+        String.fromCharCodes(base58.decode(encryptedTextbase58));
     int subNum = encryptedText.length ~/ 256;
     print(subNum);
     String decryptedText = "";
@@ -60,7 +65,9 @@ class CryptoClass {
   }
 
   static String asymmetricDecryptDataFromPem(
-      String privateKeyPem, String encryptedText) {
+      String privateKeyPem, String encryptedTextbase58) {
+    String encryptedText =
+        String.fromCharCodes(base58.decode(encryptedTextbase58));
     RsaKeyHelper helper = RsaKeyHelper();
     pointycastleCrypto.RSAPrivateKey privateKey =
         helper.parsePrivateKeyFromPem(privateKeyPem);
@@ -77,21 +84,32 @@ class CryptoClass {
   static String symmetricEncryptData(AesKeyClass key, String plainText) {
     AesCrypt crypt = key.crypt;
     String utf8PlainText = _toUtf8(plainText);
-    String encrypted = String.fromCharCodes(
-        crypt.aesEncrypt(Uint8List.fromList(utf8PlainText.codeUnits)));
-    return encrypted;
+    Uint8List encrypted =
+        crypt.aesEncrypt(padding(Uint8List.fromList(utf8PlainText.codeUnits)));
+    return base58.encode(encrypted);
   }
 
-  static String symmetricDecryptData(AesKeyClass key, String encryptedText) {
+  static String symmetricDecryptData(
+      AesKeyClass key, String encryptedTextbase58) {
+    Uint8List encryptedText = base58.decode(encryptedTextbase58);
     AesCrypt crypt = key.crypt;
-    String decrypted = String.fromCharCodes(
-        crypt.aesDecrypt(Uint8List.fromList(encryptedText.codeUnits)));
+    String decrypted = String.fromCharCodes(crypt.aesDecrypt(encryptedText));
     return _toUtf16(decrypted);
   }
 
+  static Uint8List padding(Uint8List list) {
+    if (list.length % 16 == 0) {
+      return list;
+    }
+    while (list.length % 16 == 0) {
+      list.add(0);
+    }
+    return list;
+  }
+
   static String _toUtf8(String utf16Str) {
-    String utf8Str = String.fromCharCodes(utf8.encode(utf16Str));
-    return utf8Str;
+    Uint8List uint8list = Uint8List.fromList(utf8.encode(utf16Str));
+    return String.fromCharCodes(uint8list);
   }
 
   static String _toUtf16(String utf8Str) {

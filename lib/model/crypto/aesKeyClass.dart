@@ -8,11 +8,16 @@ class AesKeyClass {
   late Uint8List iv;
 
   AesKeyClass({required this.crypt});
-  AesKeyClass.fromString(String keyString, String ivString) {
+  AesKeyClass.fromString(String aesKeyString) {
+    List<int> aesKeyStringList = aesKeyString.codeUnits;
     crypt = AesCrypt();
     crypt.aesSetMode(AesMode.cbc);
-    key = Uint8List.fromList(keyString.codeUnits);
-    iv = Uint8List.fromList(ivString.codeUnits);
+    print(aesKeyStringList.sublist(0, 32));
+    print("length: " + aesKeyStringList.sublist(0, 32).length.toString());
+    print(aesKeyStringList.sublist(32));
+    print("length: " + aesKeyStringList.sublist(32).length.toString());
+    key = Uint8List.fromList(aesKeyStringList.sublist(0, 32));
+    iv = Uint8List.fromList(aesKeyStringList.sublist(32));
     crypt.aesSetKeys(key, iv);
   }
   AesKeyClass.fromRandom() {
@@ -25,5 +30,9 @@ class AesKeyClass {
     print(key);
     print(iv);
     crypt.aesSetKeys(key, iv);
+  }
+  String getAesKeyString() {
+    List<int> list = key.toList() + iv.toList();
+    return String.fromCharCodes(list);
   }
 }
