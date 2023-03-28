@@ -1,3 +1,5 @@
+import 'package:cryptofile/model/crypto/aesKeyClass.dart';
+import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 import 'package:cryptofile/model/dto/addWriteAuthorityDTO.dart';
 import 'package:cryptofile/model/dto/generateFolderDTO.dart';
@@ -51,16 +53,22 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
 
   Future<void> _onOkFunction() async {
     RSAKeyPairClass rsaKeyPairClass = await RSAKeyPairClass.createKeyPair();
+    AesKeyClass aesKeyClass = AesKeyClass.fromRandom();
+    String symmetricKeyEWF = CryptoClass.asymmetricEncryptData(
+        rsaKeyPairClass.publicKey, aesKeyClass.getAesKeyString());
+    String folderPrivateKeyEWA = CryptoClass.asymmetricEncryptData(
+        Get.find<AccountGetX>().myAccount!.publicKey,
+        rsaKeyPairClass.getPrivateKeyString());
     bool isTitleOpen = Get.find<CreateNewFolderListTileGetX>().isTitleOpen;
     String accountCp =
         Get.find<AccountGetX>().myAccount!.getCompressedPublicKeyString();
     GenerateFolderDTO generateFolderDTO = GenerateFolderDTO(
-        isTitleOpen, createNewFolderTextEditController.text, "");
+        isTitleOpen, createNewFolderTextEditController.text, symmetricKeyEWF);
     AddWriteAuthorityDTO addWriteAuthorityDTO = AddWriteAuthorityDTO(
         accountCp,
         rsaKeyPairClass.getCompressedPublicKeyString(),
         rsaKeyPairClass.getPublicKeyString(),
-        "");
+        folderPrivateKeyEWA);
     DioHandling dioHandling = DioHandling();
     dioHandling.generateFolder(
         generateFolderDTO, rsaKeyPairClass.getCompressedPublicKeyString());
@@ -80,22 +88,6 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
       return false;
     }
   }
-
-  // Future _onOkFunction(Database db) async {
-  //   RSAKeyPairClass keyPair = await RSAKeyPairClass.createKeyPair();
-  //   RsaKeyHelper helper = RsaKeyHelper();
-  //   int date = DateTime.now().millisecondsSinceEpoch;
-  //   String privateKey = helper.encodePrivateKeyToPemPKCS1(keyPair.privateKey);
-  //   String publicKey = helper.encodePublicKeyToPemPKCS1(keyPair.publicKey);
-  //   String title = createNewFolderTextEditController.text;
-  //   Map<String, dynamic> newFolder = {
-  //     "publicKey": publicKey,
-  //     "privateKey": privateKey,
-  //     "title": title,
-  //     "lastChanged": date,
-  //   };
-  //   await SqfLiteHandling.createNewFolder(db, newFolder);
-  // }
 
   Widget _childWidget() {
     return Padding(
@@ -138,14 +130,16 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
           style: TextStyle(letterSpacing: 0.6, color: Colors.grey),
           textAlign: TextAlign.center,
         ),
-        GetBuilder<CreateNewFolderListTileGetX>(builder: (context) {
-          return Checkbox(
-            value: Get.find<CreateNewFolderListTileGetX>().isTitleOpen,
-            onChanged: (bool? value) {
-              Get.find<CreateNewFolderListTileGetX>().setIsTitleOpen(value!);
-            },
-          );
-        }),
+        GetBuilder<CreateNewFolderListTileGetX>(
+          builder: (context) {
+            return Checkbox(
+              value: Get.find<CreateNewFolderListTileGetX>().isTitleOpen,
+              onChanged: (bool? value) {
+                Get.find<CreateNewFolderListTileGetX>().setIsTitleOpen(value!);
+              },
+            );
+          },
+        ),
       ],
     );
   }

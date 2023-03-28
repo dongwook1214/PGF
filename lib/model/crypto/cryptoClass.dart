@@ -102,8 +102,6 @@ class CryptoClass {
     while (copiedList.length % 16 != 0) {
       copiedList.add(0);
     }
-    print(copiedList);
-    print("length: " + copiedList.length.toString());
     return Uint8List.fromList(copiedList);
   }
 
