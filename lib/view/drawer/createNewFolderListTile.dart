@@ -1,9 +1,14 @@
+import 'package:cryptofile/model/dioHandling/dioHandling.dart';
+import 'package:cryptofile/model/dto/addWriteAuthorityDTO.dart';
+import 'package:cryptofile/model/dto/generateFolderDTO.dart';
+import 'package:cryptofile/view_model/getx/from_model/accountGetX.dart';
+import 'package:cryptofile/view_model/getx/from_view/createNewFolderListTileGetX.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:sqflite/sqflite.dart';
 import '../designClass/dialogFormat.dart';
 import 'package:rsa_encrypt/rsa_encrypt.dart';
-import '../../model/crypto/cryptoClass.dart';
 import '../../model/sqfLiteHandling/sqfLiteHandling.dart';
 import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
 
@@ -19,36 +24,53 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController createNewFolderTextEditController =
       TextEditingController();
-  bool isNameOpen = false;
   @override
   Widget build(BuildContext context) {
+    Get.put(CreateNewFolderListTileGetX());
     return ListTile(
       title: const Text('Create New Folder'),
       onTap: () {
         showDialog(
           context: context,
-          builder: (_) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) =>
-                DialogFormat(
-              isLackOfSpace: true,
-              image: Image.asset("images/treasureBox.png"),
-              tempTitle: "Create New Folder",
-              tempDescription: "Private keys are only stored locally!",
-              childWidget: _childWidget(setState),
-              okFunction: () async {
-                if (validateCheck()) {
-                  // Database db = value.localDatabase;
-                  // await _onOkFunction(db);
-                  // await value.refreshFoldersInfo();
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                }
-              },
-            ),
+          builder: (_) => DialogFormat(
+            isLackOfSpace: true,
+            image: Image.asset("images/treasureBox.png"),
+            tempTitle: "Create New Folder",
+            tempDescription: "Private keys are only stored locally!",
+            childWidget: _childWidget(),
+            okFunction: () async {
+              if (validateCheck()) {
+                _onOkFunction();
+              }
+            },
           ),
         );
       },
     );
+  }
+
+  Future<void> _onOkFunction() async {
+    RSAKeyPairClass rsaKeyPairClass = await RSAKeyPairClass.createKeyPair();
+    bool isTitleOpen = Get.find<CreateNewFolderListTileGetX>().isTitleOpen;
+    String accountCp =
+        Get.find<AccountGetX>().myAccount!.getCompressedPublicKeyString();
+    GenerateFolderDTO generateFolderDTO = GenerateFolderDTO(
+        isTitleOpen, createNewFolderTextEditController.text, "");
+    AddWriteAuthorityDTO addWriteAuthorityDTO = AddWriteAuthorityDTO(
+        accountCp,
+        rsaKeyPairClass.getCompressedPublicKeyString(),
+        rsaKeyPairClass.getPublicKeyString(),
+        "");
+    DioHandling dioHandling = DioHandling();
+    dioHandling.generateFolder(
+        generateFolderDTO, rsaKeyPairClass.getCompressedPublicKeyString());
+    dioHandling.addWriteAuthority(addWriteAuthorityDTO);
+    goBack();
+  }
+
+  void goBack() {
+    Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   bool validateCheck() {
@@ -59,29 +81,29 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
     }
   }
 
-  Future _onOkFunction(Database db) async {
-    RSAKeyPairClass keyPair = await RSAKeyPairClass.createKeyPair();
-    RsaKeyHelper helper = RsaKeyHelper();
-    int date = DateTime.now().millisecondsSinceEpoch;
-    String privateKey = helper.encodePrivateKeyToPemPKCS1(keyPair.privateKey);
-    String publicKey = helper.encodePublicKeyToPemPKCS1(keyPair.publicKey);
-    String title = createNewFolderTextEditController.text;
-    Map<String, dynamic> newFolder = {
-      "publicKey": publicKey,
-      "privateKey": privateKey,
-      "title": title,
-      "lastChanged": date,
-    };
-    await SqfLiteHandling.createNewFolder(db, newFolder);
-  }
+  // Future _onOkFunction(Database db) async {
+  //   RSAKeyPairClass keyPair = await RSAKeyPairClass.createKeyPair();
+  //   RsaKeyHelper helper = RsaKeyHelper();
+  //   int date = DateTime.now().millisecondsSinceEpoch;
+  //   String privateKey = helper.encodePrivateKeyToPemPKCS1(keyPair.privateKey);
+  //   String publicKey = helper.encodePublicKeyToPemPKCS1(keyPair.publicKey);
+  //   String title = createNewFolderTextEditController.text;
+  //   Map<String, dynamic> newFolder = {
+  //     "publicKey": publicKey,
+  //     "privateKey": privateKey,
+  //     "title": title,
+  //     "lastChanged": date,
+  //   };
+  //   await SqfLiteHandling.createNewFolder(db, newFolder);
+  // }
 
-  Widget _childWidget(setState) {
+  Widget _childWidget() {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Row(
         children: [
           Flexible(flex: 8, child: createNewFolderTextField()),
-          Flexible(flex: 2, child: isNameOpenCheckBox(setState)),
+          Flexible(flex: 2, child: isTitleOpenCheckBox()),
         ],
       ),
     );
@@ -106,7 +128,7 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
     );
   }
 
-  Widget isNameOpenCheckBox(setState) {
+  Widget isTitleOpenCheckBox() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,15 +138,14 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
           style: TextStyle(letterSpacing: 0.6, color: Colors.grey),
           textAlign: TextAlign.center,
         ),
-        Checkbox(
-          key: ValueKey(isNameOpen),
-          value: isNameOpen,
-          onChanged: (bool? value) {
-            setState(() {
-              isNameOpen = value!;
-            });
-          },
-        ),
+        GetBuilder<CreateNewFolderListTileGetX>(builder: (context) {
+          return Checkbox(
+            value: Get.find<CreateNewFolderListTileGetX>().isTitleOpen,
+            onChanged: (bool? value) {
+              Get.find<CreateNewFolderListTileGetX>().setIsTitleOpen(value!);
+            },
+          );
+        }),
       ],
     );
   }

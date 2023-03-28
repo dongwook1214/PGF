@@ -192,22 +192,32 @@ class _MyHomePageState extends State<MainPage> {
         builder: (_) {
           if (Get.find<MainPageGetX>().selectedToggle[0]) {
             return GetBuilder<WriteAuthorityFolderGetX>(builder: (_) {
-              return ListView.builder(
-                itemCount:
-                    Get.find<WriteAuthorityFolderGetX>().folderList.length,
-                itemBuilder: (BuildContext context, int idx) => FolderCard(
-                  folder: Get.find<WriteAuthorityFolderGetX>().folderList[idx],
+              return RefreshIndicator(
+                onRefresh: () async =>
+                    await Get.find<WriteAuthorityFolderGetX>().setFolderList(),
+                child: ListView.builder(
+                  itemCount:
+                      Get.find<WriteAuthorityFolderGetX>().folderList.length,
+                  itemBuilder: (BuildContext context, int idx) => FolderCard(
+                    folder:
+                        Get.find<WriteAuthorityFolderGetX>().folderList[idx],
+                  ),
                 ),
               );
             });
           } else {
             return GetBuilder<ReadAuthorityFolderGetX>(
               builder: (_) {
-                return ListView.builder(
-                  itemCount:
-                      Get.find<ReadAuthorityFolderGetX>().folderList.length,
-                  itemBuilder: (BuildContext context, int idx) => FolderCard(
-                    folder: Get.find<ReadAuthorityFolderGetX>().folderList[idx],
+                return RefreshIndicator(
+                  onRefresh: () async =>
+                      await Get.find<ReadAuthorityFolderGetX>().setFolderList(),
+                  child: ListView.builder(
+                    itemCount:
+                        Get.find<ReadAuthorityFolderGetX>().folderList.length,
+                    itemBuilder: (BuildContext context, int idx) => FolderCard(
+                      folder:
+                          Get.find<ReadAuthorityFolderGetX>().folderList[idx],
+                    ),
                   ),
                 );
               },
