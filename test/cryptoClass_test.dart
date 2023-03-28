@@ -575,6 +575,15 @@ MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCpMoeuGH9fWsfpE3vn2hYD/vEQaP2k
     print(decrypted);
   });
 
+  test("encrypt and decrypt", () {
+    String text = "hi동욱我是中国人";
+    String encrypted =
+        CryptoClass.asymmetricEncryptDataFromPem(publicKeyPem, text);
+    String decrypted =
+        CryptoClass.asymmetricDecryptDataFromPem(privateKeyPem, encrypted);
+    expect(decrypted, text);
+  });
+
   test('ttest', () async {
     RsaKeyHelper helper = RsaKeyHelper();
     String plainText = "hi";

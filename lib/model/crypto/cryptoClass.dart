@@ -11,15 +11,16 @@ import 'package:crypto/crypto.dart' as crypto;
 class CryptoClass {
   static String asymmetricEncryptData(
       pointycastleCrypto.RSAPublicKey publicKey, String plainText) {
+    String utf8PlainText = _toUtf8(plainText);
     int i = 0;
-    int subNum = plainText.length ~/ 256;
+    int subNum = utf8PlainText.length ~/ 256;
     String encryptedText = "";
     for (i; i < subNum; ++i) {
-      String stringToEncrypt = plainText.substring(i * 256, i * 256 + 256);
+      String stringToEncrypt = utf8PlainText.substring(i * 256, i * 256 + 256);
       encryptedText += encrypt(stringToEncrypt, publicKey);
     }
-    if (plainText.length % 256 != 0) {
-      String stringToEncrypt = plainText.substring(i * 256);
+    if (utf8PlainText.length % 256 != 0) {
+      String stringToEncrypt = utf8PlainText.substring(i * 256);
       encryptedText += encrypt(stringToEncrypt, publicKey);
     }
     return encryptedText;
@@ -27,18 +28,19 @@ class CryptoClass {
 
   static String asymmetricEncryptDataFromPem(
       String publicKeyPem, String plainText) {
+    String utf8PlainText = _toUtf8(plainText);
     RsaKeyHelper helper = RsaKeyHelper();
     pointycastleCrypto.RSAPublicKey publicKey =
         helper.parsePublicKeyFromPem(publicKeyPem);
     int i = 0;
-    int subNum = plainText.length ~/ 256;
+    int subNum = utf8PlainText.length ~/ 256;
     String encryptedText = "";
     for (i; i < subNum; ++i) {
-      String stringToEncrypt = plainText.substring(i * 256, i * 256 + 256);
+      String stringToEncrypt = utf8PlainText.substring(i * 256, i * 256 + 256);
       encryptedText += encrypt(stringToEncrypt, publicKey);
     }
-    if (plainText.length % 256 != 0) {
-      String stringToEncrypt = plainText.substring(i * 256);
+    if (utf8PlainText.length % 256 != 0) {
+      String stringToEncrypt = utf8PlainText.substring(i * 256);
       encryptedText += encrypt(stringToEncrypt, publicKey);
     }
     return encryptedText;
@@ -53,7 +55,8 @@ class CryptoClass {
       String stringToDecrypt = encryptedText.substring(i * 256, i * 256 + 256);
       decryptedText += decrypt(stringToDecrypt, privateKey);
     }
-    return decryptedText;
+
+    return _toUtf16(decryptedText);
   }
 
   static String asymmetricDecryptDataFromPem(
@@ -68,13 +71,14 @@ class CryptoClass {
       String stringToDecrypt = encryptedText.substring(i * 256, i * 256 + 256);
       decryptedText += decrypt(stringToDecrypt, privateKey);
     }
-    return decryptedText;
+    return _toUtf16(decryptedText);
   }
 
   static String symmetricEncryptData(AesKeyClass key, String plainText) {
     AesCrypt crypt = key.crypt;
+    String utf8PlainText = _toUtf8(plainText);
     String encrypted = String.fromCharCodes(
-        crypt.aesEncrypt(Uint8List.fromList(plainText.codeUnits)));
+        crypt.aesEncrypt(Uint8List.fromList(utf8PlainText.codeUnits)));
     return encrypted;
   }
 
@@ -82,10 +86,20 @@ class CryptoClass {
     AesCrypt crypt = key.crypt;
     String decrypted = String.fromCharCodes(
         crypt.aesDecrypt(Uint8List.fromList(encryptedText.codeUnits)));
-    return decrypted;
+    return _toUtf16(decrypted);
   }
 
-  Future<Uint8List> _readFileByte(String filePath) async {
+  static String _toUtf8(String utf16Str) {
+    String utf8Str = String.fromCharCodes(utf8.encode(utf16Str));
+    return utf8Str;
+  }
+
+  static String _toUtf16(String utf8Str) {
+    String utf16Str = utf8.decode(utf8Str.codeUnits);
+    return utf16Str;
+  }
+
+  static Future<Uint8List> _readFileByte(String filePath) async {
     Uri myUri = Uri.parse(filePath);
     File file = new File.fromUri(myUri);
     Uint8List bytes = Uint8List(0);

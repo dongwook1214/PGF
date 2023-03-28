@@ -1,6 +1,7 @@
 import 'package:cryptofile/model/dto/addSubscribeDemandDTO.dart';
 import 'package:cryptofile/model/dto/addWriteAuthorityDTO.dart';
 import 'package:cryptofile/model/dto/allowSubscribeDTO.dart';
+import 'package:cryptofile/model/dto/fileContentsDTO.dart';
 import 'package:cryptofile/model/dto/generateFileDTO.dart';
 import 'package:cryptofile/model/dto/generateFolderDTO.dart';
 import 'package:cryptofile/model/dto/modifyFileDTO.dart';
@@ -107,15 +108,20 @@ class DioHandling {
     List list = res.data;
     List<FileDTO> fileList = [];
     for (int i = 0; i < list.length; ++i) {
-      FileDTO file = FileDTO(
-          list[i]["folderCP"],
-          list[i]["fileId"],
-          list[i]["lastChangedDate"],
-          list[i]["subheadEWS"],
-          list[i]["contentsEWS"]);
+      FileDTO file = FileDTO(list[i]["folderCP"], list[i]["fileId"],
+          list[i]["lastChangedDate"], list[i]["subheadEWS"]);
       fileList.add(file);
     }
     return fileList;
+  }
+
+  Future<FileContentsDTO> getContentsByFileIdAndFolderCP(
+      String folderCP, String fileId) async {
+    Response res = await dio.request(
+      "$baseUrl/api/v1/folders/${Uri.encodeComponent(folderCP)}/files/${Uri.encodeComponent(fileId)}",
+      options: Options(method: 'GET'),
+    );
+    return FileContentsDTO(contentsEWS: res.data);
   }
 
   Future<void> addSubscribeDemand(AddSubscribeDemandDTO dto) async {

@@ -91,4 +91,14 @@ void main() {
     print(decrypted);
     expect(decrypted, "test" * 4);
   });
+
+  test("encryptAndDecrypt", () {
+    String text = "hi동욱" * 2;
+    AesKeyClass aesKey = AesKeyClass.fromString(
+        String.fromCharCodes(key), String.fromCharCodes(iv));
+    String encrypted = CryptoClass.symmetricEncryptData(aesKey, text);
+    String decrypted = CryptoClass.symmetricDecryptData(aesKey, encrypted);
+    print(decrypted);
+    expect(text, decrypted);
+  });
 }

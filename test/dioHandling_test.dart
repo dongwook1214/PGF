@@ -56,7 +56,7 @@ void main() {
   test("dio getWriteAuthByAccountCP test", () async {
     DioHandling _instance = DioHandling();
     var res = await _instance.getWriteAuthByAccountCP(
-        "1GxuSpqcnNPhT2gL!@=VvzVP7DG16qPLhUHHVngfy6ss/");
+        "1GxuSpqcnNPhT2gL!@=VvzVP7DG16qPLhUHHVngfy6ss");
     //print(res);
     expect(res.isEmpty, false);
   });
@@ -116,5 +116,13 @@ void main() {
     DioHandling _instance = DioHandling();
     var res = await _instance.search("keyword");
     expect(res.isEmpty, false);
+  });
+
+  test("dio getContentsByFileIdAndFolderCP test", () async {
+    DioHandling _instance = DioHandling();
+    var res = await _instance.getContentsByFileIdAndFolderCP(
+        "D82aA88htrCCgxL3yrJDh3mB2T9joVmbBf3sSooaNC3L", "dsfhksdfhkjs");
+    print(res.contentsEWS);
+    expect(res.contentsEWS.isEmpty, false);
   });
 }

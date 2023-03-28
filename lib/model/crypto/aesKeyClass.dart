@@ -10,12 +10,14 @@ class AesKeyClass {
   AesKeyClass({required this.crypt});
   AesKeyClass.fromString(String keyString, String ivString) {
     crypt = AesCrypt();
+    crypt.aesSetMode(AesMode.cbc);
     key = Uint8List.fromList(keyString.codeUnits);
     iv = Uint8List.fromList(ivString.codeUnits);
     crypt.aesSetKeys(key, iv);
   }
   AesKeyClass.fromRandom() {
     crypt = AesCrypt();
+    crypt.aesSetMode(AesMode.cbc);
     Random random = Random.secure();
     key =
         Uint8List.fromList(List<int>.generate(32, (i) => random.nextInt(256)));
