@@ -1,4 +1,9 @@
 import 'dart:async';
+import 'package:cryptofile/model/dioHandling/dioHandling.dart';
+import 'package:cryptofile/model/dto/addSubscribeDemandDTO.dart';
+import 'package:cryptofile/view/designClass/dialogFormat.dart';
+import 'package:cryptofile/view/designClass/snackBarFormat.dart';
+import 'package:cryptofile/view_model/getx/from_model/accountGetX.dart';
 import 'package:cryptofile/view_model/getx/from_model/searchContentsDTOGetX.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -55,24 +60,52 @@ class _SearchFolderPageState extends State<SearchFolderPage> {
               builder: (context, AsyncSnapshot snapshot) {
                 Get.find<SearchContentsDTOGetX>()
                     .setSearchedList(snapshot.data);
-                return GetBuilder<SearchContentsDTOGetX>(builder: (context) {
-                  return ListView.builder(
-                    itemCount:
-                        Get.find<SearchContentsDTOGetX>().searchedList.length,
-                    itemBuilder: (context, i) => ListTile(
-                      title: Text(Get.find<SearchContentsDTOGetX>()
-                          .searchedList[i]
-                          .title),
-                      subtitle: Text(
-                          "${Get.find<SearchContentsDTOGetX>().searchedList[i].folderCP.substring(0, 10)}..."),
-                    ),
-                  );
-                });
+                return _listViewBuilder();
               },
             ),
           )
         ],
       ),
     );
+  }
+
+  Widget _listViewBuilder() {
+    return GetBuilder<SearchContentsDTOGetX>(
+      builder: (context) {
+        return ListView.builder(
+          itemCount: Get.find<SearchContentsDTOGetX>().searchedList.length,
+          itemBuilder: (context, i) => _listTile(i),
+        );
+      },
+    );
+  }
+
+  Widget _listTile(int i) {
+    return ListTile(
+      onTap: () => showDialog(context: context, builder: (_) => _dialog(i)),
+      title: Text(Get.find<SearchContentsDTOGetX>().searchedList[i].title),
+      subtitle: Text(
+          "${Get.find<SearchContentsDTOGetX>().searchedList[i].folderCP.substring(0, 10)}..."),
+    );
+  }
+
+  Widget _dialog(int i) {
+    return DialogFormat(
+        image: Image.asset("images/get.png"),
+        tempTitle: "Do you want to subscribe?",
+        tempDescription:
+            "${Get.find<SearchContentsDTOGetX>().searchedList[i].title}\n\n${Get.find<SearchContentsDTOGetX>().searchedList[i].folderCP}",
+        okFunction: () => _okFunction(i));
+  }
+
+  void _okFunction(int i) {
+    DioHandling dioHandling = DioHandling();
+    AddSubscribeDemandDTO addSubscribeDemandDTO = AddSubscribeDemandDTO(
+        Get.find<SearchContentsDTOGetX>().searchedList[i].folderCP,
+        Get.find<AccountGetX>().myAccount!.getCompressedPublicKeyString(), []);
+    dioHandling.addSubscribeDemand(addSubscribeDemandDTO);
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBarFormat(Text("subscription request has been sended."), context));
   }
 }
