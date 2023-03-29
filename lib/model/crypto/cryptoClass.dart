@@ -81,6 +81,13 @@ class CryptoClass {
     return _toUtf16(decryptedText);
   }
 
+  static List<int> makeSign(
+      String plainText, pointycastleCrypto.RSAPrivateKey privateKey) {
+    RsaKeyHelper helper = RsaKeyHelper();
+    Uint8List sign = helper.sign(plainText, privateKey);
+    return sign;
+  }
+
   static String symmetricEncryptData(AesKeyClass key, String plainText) {
     AesCrypt crypt = key.crypt;
     String utf8PlainText = _toUtf8(plainText);

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 import 'package:cryptofile/model/dto/addSubscribeDemandDTO.dart';
 import 'package:cryptofile/view/designClass/dialogFormat.dart';
@@ -6,8 +7,6 @@ import 'package:cryptofile/view/designClass/snackBarFormat.dart';
 import 'package:cryptofile/view_model/getx/from_model/accountGetX.dart';
 import 'package:cryptofile/view_model/getx/from_model/searchContentsDTOGetX.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 
 class SearchFolderPage extends StatefulWidget {
@@ -101,11 +100,15 @@ class _SearchFolderPageState extends State<SearchFolderPage> {
   void _okFunction(int i) {
     DioHandling dioHandling = DioHandling();
     AddSubscribeDemandDTO addSubscribeDemandDTO = AddSubscribeDemandDTO(
-        Get.find<SearchContentsDTOGetX>().searchedList[i].folderCP,
-        Get.find<AccountGetX>().myAccount!.getCompressedPublicKeyString(), []);
+      Get.find<SearchContentsDTOGetX>().searchedList[i].folderCP,
+      Get.find<AccountGetX>().myAccount!.getCompressedPublicKeyString(),
+      CryptoClass.makeSign(
+          Get.find<AccountGetX>().myAccount!.getPublicKeyString(),
+          Get.find<AccountGetX>().myAccount!.privateKey),
+    );
     dioHandling.addSubscribeDemand(addSubscribeDemandDTO);
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBarFormat(Text("subscription request has been sended."), context));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBarFormat(
+        const Text("subscription request has been sended."), context));
   }
 }
