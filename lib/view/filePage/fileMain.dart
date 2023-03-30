@@ -5,6 +5,7 @@ import 'package:cryptofile/model/folder/writeAuthorityFolderClass.dart';
 import 'package:cryptofile/model/prefsHandling/prefsHandling.dart';
 import 'package:cryptofile/view/designClass/borderCard.dart';
 import 'package:cryptofile/view/filePage/filePage.dart';
+import 'package:cryptofile/view/file_page_drawer/filePageDrawer.dart';
 import 'package:cryptofile/view_model/getx/from_model/fileGetX.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,33 +28,25 @@ class _FileMainState extends State<FileMain> {
 
   late Size size;
   late ColorScheme scheme;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     scheme = Theme.of(context).colorScheme;
     return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: widget.folderClass is WriteAuthorityFolderClass
+          ? FilePageDrawer(
+              folderClass: widget.folderClass,
+            )
+          : null,
       appBar: AppBar(
         title: Text(widget.folderClass.getTitle()),
         backgroundColor: Colors.transparent,
         leading: _leading(),
-        actions: _actions(),
       ),
       body: _listViewBuilder(widget.folderClass.getFolderCP()),
     );
-  }
-
-  List<Widget> _actions() {
-    return widget.folderClass is WriteAuthorityFolderClass
-        ? [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.menu,
-                color: scheme.onBackground,
-              ),
-            ),
-          ]
-        : [];
   }
 
   Widget _leading() {
@@ -70,10 +63,13 @@ class _FileMainState extends State<FileMain> {
     Get.find<FileGetX>().setFileList(folderCP);
     return GetBuilder<FileGetX>(
       builder: (context) {
-        return ListView.builder(
-          itemCount: Get.find<FileGetX>().fileList.length,
-          itemBuilder: (BuildContext context, int index) =>
-              paper(Get.find<FileGetX>().fileList[index], size.width * 1),
+        return RefreshIndicator(
+          onRefresh: () => Get.find<FileGetX>().setFileList(folderCP),
+          child: ListView.builder(
+            itemCount: Get.find<FileGetX>().fileList.length,
+            itemBuilder: (BuildContext context, int index) =>
+                paper(Get.find<FileGetX>().fileList[index], size.width * 1),
+          ),
         );
       },
     );
@@ -90,6 +86,7 @@ class _FileMainState extends State<FileMain> {
             MaterialPageRoute(
               builder: (_) => FilePage(
                 fileClass: fileClass,
+                folderClass: widget.folderClass,
                 isWriteAuth: widget.folderClass is WriteAuthorityFolderClass,
               ),
             ),

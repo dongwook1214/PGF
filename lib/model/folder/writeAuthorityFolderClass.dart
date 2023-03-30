@@ -63,4 +63,9 @@ class WriteAuthorityFolderClass implements FolderClass {
   String getLastChangedDate() {
     return DateFormat.yMMMd().format(lastChangedDate);
   }
+
+  @override
+  String getSymmetricKey() {
+    return symmetricKey;
+  }
 }

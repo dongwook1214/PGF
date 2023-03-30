@@ -88,6 +88,14 @@ class CryptoClass {
     return sign;
   }
 
+  static List<int> makeSignFromPem(String plainText, String privateKeyPem) {
+    RsaKeyHelper helper = RsaKeyHelper();
+    pointycastleCrypto.RSAPrivateKey privateKey =
+        helper.parsePrivateKeyFromPem(privateKeyPem);
+    Uint8List sign = helper.sign(plainText, privateKey);
+    return sign;
+  }
+
   static String symmetricEncryptData(AesKeyClass key, String plainText) {
     AesCrypt crypt = key.crypt;
     String utf8PlainText = _toUtf8(plainText);

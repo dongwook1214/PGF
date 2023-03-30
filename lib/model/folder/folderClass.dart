@@ -4,4 +4,5 @@ abstract class FolderClass {
   String getPublicKey();
   String getFolderCP();
   String getLastChangedDate();
+  String getSymmetricKey();
 }

@@ -1,19 +1,19 @@
 class AllowSubscribeDTO {
   final String folderPublicKey;
 
-  final String sign;
+  final List<int> byteSign;
 
   final String accountCP;
 
   final String symmetricKeyEWA;
 
-  AllowSubscribeDTO(
-      this.folderPublicKey, this.sign, this.accountCP, this.symmetricKeyEWA);
+  AllowSubscribeDTO(this.folderPublicKey, this.byteSign, this.accountCP,
+      this.symmetricKeyEWA);
 
   Map<String, dynamic> toJson() {
     return {
       'folderPublicKey': folderPublicKey,
-      'sign': sign,
+      'byteSign': byteSign,
       'accountCP': accountCP,
       'symmetricKeyEWA': symmetricKeyEWA,
     };
