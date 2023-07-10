@@ -1,3 +1,4 @@
+import 'package:bs58/bs58.dart';
 import 'package:cryptofile/model/crypto/aesKeyClass.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dioHandling/dioHandling.dart';
@@ -57,9 +58,11 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
     AesKeyClass aesKeyClass = AesKeyClass.fromRandom();
     String symmetricKeyEWF = CryptoClass.asymmetricEncryptData(
         rsaKeyPairClass.publicKey, aesKeyClass.getAesKeyString());
+
     String folderPrivateKeyEWA = CryptoClass.asymmetricEncryptData(
         Get.find<AccountGetX>().myAccount!.publicKey,
         rsaKeyPairClass.getPrivateKeyString());
+
     bool isTitleOpen = Get.find<CreateNewFolderListTileGetX>().isTitleOpen;
     String accountCp =
         Get.find<AccountGetX>().myAccount!.getCompressedPublicKeyString();
@@ -71,9 +74,10 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
         rsaKeyPairClass.getPublicKeyString(),
         folderPrivateKeyEWA);
     DioHandling dioHandling = DioHandling();
-    dioHandling.generateFolder(
+    addWriteAuthorityDTO.printData();
+    await dioHandling.generateFolder(
         generateFolderDTO, rsaKeyPairClass.getCompressedPublicKeyString());
-    dioHandling.addWriteAuthority(addWriteAuthorityDTO);
+    await dioHandling.addWriteAuthority(addWriteAuthorityDTO);
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBarFormat(Text("folder is created! Try refresh"), context));
     goBack();

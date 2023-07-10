@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 class FileMain extends StatefulWidget {
   final FolderClass folderClass;
   FileMain({super.key, required this.folderClass});
+
   @override
   State<FileMain> createState() => _FileMainState();
 }
@@ -29,6 +30,7 @@ class _FileMainState extends State<FileMain> {
   late Size size;
   late ColorScheme scheme;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;

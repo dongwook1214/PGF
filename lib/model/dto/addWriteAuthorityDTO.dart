@@ -1,21 +1,29 @@
 class AddWriteAuthorityDTO {
-  final String accountCp;
+  final String accountCP;
 
-  final String folderCp;
+  final String folderCP;
 
   final String folderPublicKey;
 
   final String folderPrivateKeyEWA;
 
-  AddWriteAuthorityDTO(this.accountCp, this.folderCp, this.folderPublicKey,
+  AddWriteAuthorityDTO(this.accountCP, this.folderCP, this.folderPublicKey,
       this.folderPrivateKeyEWA);
 
   Map<String, dynamic> toJson() {
     return {
-      'accountCp': accountCp,
-      'folderCp': folderCp,
+      'accountCP': accountCP,
+      'folderCP': folderCP,
       'folderPublicKey': folderPublicKey,
       "folderPrivateKeyEWA": folderPrivateKeyEWA,
     };
+  }
+
+  void printData() {
+    print('''
+      accountCP : ${accountCP}
+      folderCP : ${folderCP}
+      folderPublicKey : ${folderPublicKey}
+      folderPrivateKeyEWA : ${folderPrivateKeyEWA}''');
   }
 }

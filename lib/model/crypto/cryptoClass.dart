@@ -129,18 +129,4 @@ class CryptoClass {
     String utf16Str = utf8.decode(utf8Str.codeUnits);
     return utf16Str;
   }
-
-  static Future<Uint8List> _readFileByte(String filePath) async {
-    Uri myUri = Uri.parse(filePath);
-    File file = new File.fromUri(myUri);
-    Uint8List bytes = Uint8List(0);
-    await file.readAsBytes().then((value) {
-      bytes = Uint8List.fromList(value);
-      print('reading of bytes is completed');
-    }).catchError((onError) {
-      print('Exception Error while reading audio from path:' +
-          onError.toString());
-    });
-    return bytes;
-  }
 }

@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:bs58/bs58.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 import 'package:cryptofile/model/dto/generateFileDTO.dart';
@@ -79,7 +82,9 @@ class _AddFileListTileState extends State<AddFileListTile> {
     GenerateFileDTO generateFileDTO =
         GenerateFileDTO(byteSign, createNewFileTextEditController.text);
     dioHandling.generateFile(
-        widget.folderClass.getPublicKey(), generateFileDTO);
+        base58.encode(
+            Uint8List.fromList(widget.folderClass.getPublicKey().codeUnits)),
+        generateFileDTO);
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBarFormat(const Text("file is added! try refresh"), context));
     Navigator.pop(context);

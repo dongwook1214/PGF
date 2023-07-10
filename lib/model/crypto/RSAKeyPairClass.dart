@@ -43,6 +43,14 @@ class RSAKeyPairClass {
     return helper.encodePublicKeyToPemPKCS8(publicKey);
   }
 
+  String getPublicKeyBase58() {
+    return base58.encode(Uint8List.fromList(getPublicKeyString().codeUnits));
+  }
+
+  String getPublicKeyModulusExponent() {
+    return "${publicKey.modulus}and${publicKey.exponent}";
+  }
+
   bool isKeyPairValid() {
     String encryptedValid = encrypt("validity", publicKey);
     String decryptedValid = decrypt(encryptedValid, privateKey);

@@ -46,8 +46,7 @@ class FolderCard extends StatelessWidget {
     return GenericContextMenu(
       buttonConfigs: [
         ContextMenuButtonConfig("copy", onPressed: () => copyFunction(context)),
-        ContextMenuButtonConfig("Hide folder", onPressed: () {}),
-        ContextMenuButtonConfig("Delete folder forever", onPressed: () {}),
+        // ContextMenuButtonConfig("Delete folder forever", onPressed: () {}),
       ],
     );
   }

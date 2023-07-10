@@ -33,12 +33,6 @@ class _DrawerClassState extends State<DrawerClass> {
             onTap: () => Navigator.push(
                 context, MaterialPageRoute(builder: (_) => SearchFolderPage())),
           ),
-          ListTile(
-            title: const Text('View Ads For Developers'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
           HowToUse(),
           ContactUsClass(),
           LogOut(),

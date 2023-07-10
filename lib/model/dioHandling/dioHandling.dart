@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:bs58/bs58.dart';
 import 'package:cryptofile/model/dto/addSubscribeDemandDTO.dart';
 import 'package:cryptofile/model/dto/addWriteAuthorityDTO.dart';
 import 'package:cryptofile/model/dto/allowSubscribeDTO.dart';
@@ -17,6 +20,7 @@ class DioHandling {
   final Dio dio = Dio();
   final String baseUrl =
       "http://ec2-43-201-160-79.ap-northeast-2.compute.amazonaws.com:8080";
+  // final String baseUrl = "http://localhost:8080";
   factory DioHandling() {
     return _instance;
   }
@@ -34,7 +38,6 @@ class DioHandling {
 
   Future<List<WriteAuthorityFolderDTO>> getWriteAuthByAccountCP(
       String accountCP) async {
-    print(Uri.encodeComponent(accountCP));
     Response res = await dio.request(
       "$baseUrl/api/v1/write-auths/${Uri.encodeComponent(accountCP)}/folders",
       options: Options(method: 'GET'),
@@ -100,6 +103,7 @@ class DioHandling {
   }
 
   Future<List<FileDTO>> getFileByFolderCP(String folderCP) async {
+    print("$baseUrl/api/v1/folders/${Uri.encodeComponent(folderCP)}/files");
     Response res = await dio.request(
       "$baseUrl/api/v1/folders/${Uri.encodeComponent(folderCP)}/files",
       options: Options(method: 'GET'),
@@ -162,6 +166,7 @@ class DioHandling {
       options: Options(method: 'POST', contentType: "application/json"),
       data: dto,
     );
+    print(res);
   }
 
   Future<List<SearchContentsDTO>> search(String keyword) async {

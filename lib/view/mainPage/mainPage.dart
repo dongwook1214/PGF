@@ -85,8 +85,6 @@ class _MyHomePageState extends State<MainPage> {
   Widget _hambergerActionButton() {
     return GetBuilder<AccountGetX>(
       builder: (_) {
-        print("account change");
-        print(Get.find<AccountGetX>().myAccount);
         return Get.find<AccountGetX>().myAccount == null
             ? const SizedBox.shrink()
             : IconButton(

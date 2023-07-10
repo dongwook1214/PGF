@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
+import 'package:cryptofile/model/crypto/aesKeyClass.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dto/writeAuthorityFolderDTO.dart';
 import 'package:cryptofile/model/folder/folderClass.dart';
@@ -27,15 +28,16 @@ class WriteAuthorityFolderClass implements FolderClass {
       WriteAuthorityFolderDTO dto, RSAKeyPairClass rsaKeyPairClass) {
     folderCP = dto.folderCP;
     folderPublicKey = dto.folderPublicKey;
-    // folderPrivateKey =
-    //     CryptoClass.asymmetricDecryptData(rsaKeyPairClass.privateKey, dto.folderPrivateKeyEWA);
-    folderPrivateKey = dto.folderPrivateKeyEWA;
+    folderPrivateKey = CryptoClass.asymmetricDecryptData(
+        rsaKeyPairClass.privateKey, dto.folderPrivateKeyEWA);
     isTitleOpen = dto.isTitleOpen;
-    symmetricKey = dto.symmetricKeyEWF;
-    // symmetricKey = CryptoClass.asymmetricDecryptDataFromPem(
-    //     folderPrivateKey, dto.symmetricKeyEWF);
-    //title = isTitleOpen ? dto.title:CryptoClass.symmetricDecryptData(symmetricKey, dto.title);
-    title = dto.title;
+    symmetricKey = CryptoClass.asymmetricDecryptDataFromPem(
+        folderPrivateKey, dto.symmetricKeyEWF);
+    title = isTitleOpen
+        ? dto.title
+        : CryptoClass.symmetricDecryptData(
+            AesKeyClass.fromString(symmetricKey), dto.title);
+
     lastChangedDate = DateTime.parse(dto.lastChangedDate);
   }
 
