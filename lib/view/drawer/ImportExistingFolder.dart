@@ -31,7 +31,6 @@ class _ImportExistingFolderState extends State<ImportExistingFolder> {
           context: context,
           builder: (_) => DialogFormat(
             image: Image.asset("images/location.png"),
-            tempDescription: "The private key is never sent to the server!",
             okFunction: () {
               if (validateCheck()) {
                 _okFunction();

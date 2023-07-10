@@ -34,6 +34,7 @@ class CryptoClass {
     RsaKeyHelper helper = RsaKeyHelper();
     pointycastleCrypto.RSAPublicKey publicKey =
         helper.parsePublicKeyFromPem(publicKeyPem);
+
     int i = 0;
     int subNum = utf8PlainText.length ~/ 256;
     String encryptedText = "";

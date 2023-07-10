@@ -23,6 +23,7 @@ class WriteAuthorityFolderGetX extends GetxController {
       folderList.add(WriteAuthorityFolderClass.fromDTO(dto, rsaKeyPair));
     }
     print("setList Fisnish");
+    print(folderList);
     update();
   }
 }

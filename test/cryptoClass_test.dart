@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
@@ -86,9 +87,16 @@ MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCpMoeuGH9fWsfpE3vn2hYD/vEQaP2k
     print(keyPair.getPublicKeyString());
   });
 
+  test("sdf", () {
+    String s = "validate";
+    var codec = Utf8Codec(allowMalformed: true);
+
+    print(Uint8List.fromList(codec.encode(s)));
+  });
+
   test('getPublickeyExpoAndmodulus', () async {
     RSAKeyPairClass keyPair = await RSAKeyPairClass.createKeyPair();
-    print(keyPair.getPublicKeyModulusExponent());
+    print(RSAKeyPairClass.getPublicKeyModulusExponent(publicKeyPem));
   });
 
   test('get compressed publickey test', () async {

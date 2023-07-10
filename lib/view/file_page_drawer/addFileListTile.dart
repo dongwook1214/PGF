@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:bs58/bs58.dart';
+import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 import 'package:cryptofile/model/dto/generateFileDTO.dart';
@@ -76,15 +77,20 @@ class _AddFileListTileState extends State<AddFileListTile> {
   }
 
   void _onOkFunction() {
-    List<int> byteSign = CryptoClass.makeSignFromPem(
+    RSAKeyPairClass rsaKeyPairClass = RSAKeyPairClass.fromPems(
         widget.folderClass.getPublicKey(), widget.folderClass.getPrivateKey());
+
+    List<int> byteSign = CryptoClass.makeSignFromPem(
+        "validate", widget.folderClass.getPrivateKey());
     DioHandling dioHandling = DioHandling();
     GenerateFileDTO generateFileDTO =
         GenerateFileDTO(byteSign, createNewFileTextEditController.text);
+
     dioHandling.generateFile(
-        base58.encode(
-            Uint8List.fromList(widget.folderClass.getPublicKey().codeUnits)),
+        RSAKeyPairClass.getPublicKeyModulusExponent(
+            widget.folderClass.getPublicKey()),
         generateFileDTO);
+
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBarFormat(const Text("file is added! try refresh"), context));
     Navigator.pop(context);

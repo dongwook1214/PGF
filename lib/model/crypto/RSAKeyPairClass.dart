@@ -28,7 +28,7 @@ class RSAKeyPairClass {
   }
 
   String getCompressedPublicKeyString() {
-    List<int> bytes = getPublicKeyString().codeUnits;
+    List<int> bytes = "${publicKey.modulus}and${publicKey.exponent}".codeUnits;
     crypto.Digest digest = crypto.sha256.convert(bytes);
     return base58.encode(Uint8List.fromList(digest.bytes));
   }
@@ -47,7 +47,9 @@ class RSAKeyPairClass {
     return base58.encode(Uint8List.fromList(getPublicKeyString().codeUnits));
   }
 
-  String getPublicKeyModulusExponent() {
+  static String getPublicKeyModulusExponent(String publicKeyPem) {
+    RsaKeyHelper helper = RsaKeyHelper();
+    var publicKey = helper.parsePublicKeyFromPem(publicKeyPem);
     return "${publicKey.modulus}and${publicKey.exponent}";
   }
 

@@ -12,6 +12,8 @@ class FileContentsGetX extends GetxController {
     FileContentsDTO dto =
         await dioHandling.getContentsByFileIdAndFolderCP(folderCP, fileId);
     contents = FileContents.fromDTO(dto);
+    print(contents.fileContents);
+    print("finish");
     update();
   }
 }

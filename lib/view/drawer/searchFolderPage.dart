@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 import 'package:cryptofile/model/dto/addSubscribeDemandDTO.dart';
@@ -101,10 +102,10 @@ class _SearchFolderPageState extends State<SearchFolderPage> {
     DioHandling dioHandling = DioHandling();
     AddSubscribeDemandDTO addSubscribeDemandDTO = AddSubscribeDemandDTO(
       Get.find<SearchContentsDTOGetX>().searchedList[i].folderCP,
-      Get.find<AccountGetX>().myAccount!.getCompressedPublicKeyString(),
+      RSAKeyPairClass.getPublicKeyModulusExponent(
+          Get.find<AccountGetX>().myAccount!.getPublicKeyString()),
       CryptoClass.makeSign(
-          Get.find<AccountGetX>().myAccount!.getPublicKeyString(),
-          Get.find<AccountGetX>().myAccount!.privateKey),
+          "validate", Get.find<AccountGetX>().myAccount!.privateKey),
     );
     dioHandling.addSubscribeDemand(addSubscribeDemandDTO);
     Navigator.pop(context);

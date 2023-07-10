@@ -66,6 +66,7 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
     bool isTitleOpen = Get.find<CreateNewFolderListTileGetX>().isTitleOpen;
     String accountCp =
         Get.find<AccountGetX>().myAccount!.getCompressedPublicKeyString();
+    print(isTitleOpen);
     GenerateFolderDTO generateFolderDTO = GenerateFolderDTO(
         isTitleOpen, createNewFolderTextEditController.text, symmetricKeyEWF);
     AddWriteAuthorityDTO addWriteAuthorityDTO = AddWriteAuthorityDTO(

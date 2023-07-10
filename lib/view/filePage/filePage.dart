@@ -1,3 +1,4 @@
+import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 import 'package:cryptofile/model/dto/modifyFileDTO.dart';
@@ -26,9 +27,11 @@ class FilePage extends StatefulWidget {
 }
 
 class _FilePageState extends State<FilePage> {
+  @override
   late ColorScheme scheme;
   late Size size;
   final TextEditingController textEditingController = TextEditingController();
+  bool isFirstBuild = true;
   @override
   Widget build(BuildContext context) {
     Get.put(FileContentsGetX());
@@ -71,22 +74,30 @@ class _FilePageState extends State<FilePage> {
 
   Future _onCheckIconPressed() async {
     List<int> byteSign = CryptoClass.makeSignFromPem(
-        widget.folderClass.getPublicKey(), widget.folderClass.getPrivateKey());
+        "validate", widget.folderClass.getPrivateKey());
     DioHandling dioHandling = DioHandling();
     ModifyFileDTO modifyFileDTO = ModifyFileDTO(
         byteSign, textEditingController.text, widget.fileClass.subhead);
     ScaffoldMessenger.of(context).showSnackBar(SnackBarFormat(
         const Text(textAlign: TextAlign.center, "file is modified"), context));
-    await dioHandling.modifyFile(modifyFileDTO,
-        widget.folderClass.getPublicKey(), widget.fileClass.fileId);
+    await dioHandling.modifyFile(
+        modifyFileDTO,
+        RSAKeyPairClass.getPublicKeyModulusExponent(
+            widget.folderClass.getPublicKey()),
+        widget.fileClass.fileId);
   }
 
   Widget textField() {
-    Get.find<FileContentsGetX>()
-        .getFileContents(widget.fileClass.folderCP, widget.fileClass.fileId);
+    if (isFirstBuild) {
+      isFirstBuild = false;
+      Get.find<FileContentsGetX>()
+          .getFileContents(widget.fileClass.folderCP, widget.fileClass.fileId)
+          .then((value) {
+        textEditingController.text =
+            Get.find<FileContentsGetX>().contents.fileContents;
+      });
+    }
     return GetBuilder<FileContentsGetX>(builder: (context) {
-      textEditingController.text =
-          Get.find<FileContentsGetX>().contents.fileContents;
       return TextField(
         keyboardType: TextInputType.multiline,
         textInputAction: TextInputAction.newline,

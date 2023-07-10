@@ -125,7 +125,7 @@ class DioHandling {
       "$baseUrl/api/v1/folders/${Uri.encodeComponent(folderCP)}/files/${Uri.encodeComponent(fileId)}",
       options: Options(method: 'GET'),
     );
-    return FileContentsDTO(contentsEWS: res.data);
+    return FileContentsDTO(contentsEWS: res.data ?? "");
   }
 
   Future<void> addSubscribeDemand(AddSubscribeDemandDTO dto) async {

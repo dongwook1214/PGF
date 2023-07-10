@@ -25,11 +25,10 @@ class _ImportAccountDialogState extends State<ImportAccountDialog> {
   Widget build(BuildContext context) {
     return DialogFormat(
       image: Image.asset("images/human.png"),
-      tempDescription: "write your key including header and footer.",
       okFunction: () {
         onOkButtonPressed();
       },
-      tempTitle: 'Import Existing Account',
+      tempTitle: 'write your key including header and footer.',
       childWidget: _textInput(),
       isLackOfSpace: true,
     );

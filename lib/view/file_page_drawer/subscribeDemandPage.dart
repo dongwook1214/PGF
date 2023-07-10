@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:bs58/bs58.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 import 'package:cryptofile/model/dto/allowSubscribeDTO.dart';
@@ -9,6 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
+import 'package:pointycastle/export.dart' as pointycastleCrypto;
+import 'package:crypto/crypto.dart' as crypto;
+
+import '../../model/crypto/RSAKeyPairClass.dart';
 
 class SubscribeDemandPage extends StatefulWidget {
   final FolderClass folderClass;
@@ -57,16 +64,34 @@ class _SubscribeDemandPageState extends State<SubscribeDemandPage> {
     });
   }
 
+  String _publicKeyPretreatmen(String str) {
+    crypto.Digest digest = crypto.sha256.convert(str.codeUnits);
+    String cp = base58.encode(Uint8List.fromList(digest.bytes));
+    if (cp.length > 20) {
+      return "${cp.substring(0, 20)}...";
+    } else {
+      return cp;
+    }
+  }
+
   Widget _listTile(int index) {
-    return ListTile(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (_) => _alertDialog(index),
-        );
-      },
-      title:
-          Text(Get.find<subscribeDemandPageGetX>().subscribeDemandList[index]),
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+      child: ListTile(
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Colors.transparent),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        tileColor: scheme.onSecondary,
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (_) => _alertDialog(index),
+          );
+        },
+        title: Text(_publicKeyPretreatmen(
+            Get.find<subscribeDemandPageGetX>().subscribeDemandList[index])),
+      ),
     );
   }
 
@@ -87,20 +112,36 @@ class _SubscribeDemandPageState extends State<SubscribeDemandPage> {
     );
   }
 
-  void _onOkPressed(int index) {
-    String symmetricKeyEWA = CryptoClass.asymmetricEncryptDataFromPem(
-        Get.find<subscribeDemandPageGetX>().subscribeDemandList[index],
-        widget.folderClass.getSymmetricKey());
+  void _onOkPressed(int index) async {
+    String input =
+        Get.find<subscribeDemandPageGetX>().subscribeDemandList[index];
+    RegExp regExp = RegExp(r'(\d+)and(\d+)');
+
+    RegExpMatch? match = regExp.firstMatch(input);
+
+    BigInt modulus = BigInt.parse(match!.group(1)!);
+    BigInt exponent = BigInt.parse(match.group(2)!);
+
+    pointycastleCrypto.RSAPublicKey rsaPublicKey =
+        pointycastleCrypto.RSAPublicKey(modulus, exponent);
+
+    crypto.Digest digest = crypto.sha256.convert(input.codeUnits);
+    String cp = base58.encode(Uint8List.fromList(digest.bytes));
+
+    //수정 필요 현재 compressed account
+    String symmetricKeyEWA = CryptoClass.asymmetricEncryptData(
+        rsaPublicKey, widget.folderClass.getSymmetricKey());
 
     List<int> byteSign = CryptoClass.makeSignFromPem(
-        widget.folderClass.getPublicKey(), widget.folderClass.getPrivateKey());
+        "validate", widget.folderClass.getPrivateKey());
 
     DioHandling dioHandling = DioHandling();
 
     AllowSubscribeDTO allowSubscribeDTO = AllowSubscribeDTO(
-        widget.folderClass.getPublicKey(),
+        RSAKeyPairClass.getPublicKeyModulusExponent(
+            widget.folderClass.getPublicKey()),
         byteSign,
-        Get.find<AccountGetX>().myAccount!.getCompressedPublicKeyString(),
+        cp,
         symmetricKeyEWA);
 
     dioHandling.allowSubscribe(allowSubscribeDTO);
