@@ -1,3 +1,4 @@
+import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
 import 'package:cryptofile/model/crypto/aesKeyClass.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -70,17 +71,17 @@ void main() {
 
   test('encrypt test', () {
     AesKeyClass aesKey = AesKeyClass.fromString(aesKeyString);
-    String encrypted = CryptoClass.symmetricEncryptData(aesKey, "test" * 4);
+    String encrypted = CryptoClass.symmetricEncryptData(aesKey, "tes");
     print(encrypted);
     expect(encrypted.isNotEmpty, true);
   });
 
   test("decrypt test", () {
-    String encrypted = "C9bMD82L1ggfrpm3jkJwnp";
+    String encrypted = "UVnzpbQQE7L8uJQGgz6aVq";
     AesKeyClass aesKey = AesKeyClass.fromString(aesKeyString);
     String decrypted = CryptoClass.symmetricDecryptData(aesKey, encrypted);
     print(decrypted);
-    expect(decrypted, "test" * 4);
+    expect(decrypted, "tes");
   });
 
   test("encryptAndDecrypt", () {
@@ -90,5 +91,21 @@ void main() {
     String decrypted = CryptoClass.symmetricDecryptData(aesKey, encrypted);
     print(decrypted);
     expect(decrypted.contains(text), true);
+  });
+
+  test("encrypt aesKey and decrypt", () async {
+    RSAKeyPairClass rsaKeyPairClass = await RSAKeyPairClass.createKeyPair();
+    String encrypted = CryptoClass.asymmetricEncryptData(
+        rsaKeyPairClass.publicKey, aesKeyString);
+
+    String decrypted = CryptoClass.asymmetricDecryptData(
+        rsaKeyPairClass.privateKey, encrypted);
+
+    String symEncrypted = CryptoClass.symmetricEncryptData(
+        AesKeyClass.fromString(decrypted), "hhh");
+    String symDecrypted = CryptoClass.symmetricDecryptData(
+        AesKeyClass.fromString(decrypted), symEncrypted);
+    expect(decrypted, aesKeyString);
+    expect(symDecrypted, "hhh");
   });
 }

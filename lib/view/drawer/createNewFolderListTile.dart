@@ -58,17 +58,18 @@ class _CreateNewFolderListTileState extends State<CreateNewFolderListTile> {
     AesKeyClass aesKeyClass = AesKeyClass.fromRandom();
     String symmetricKeyEWF = CryptoClass.asymmetricEncryptData(
         rsaKeyPairClass.publicKey, aesKeyClass.getAesKeyString());
-
     String folderPrivateKeyEWA = CryptoClass.asymmetricEncryptData(
         Get.find<AccountGetX>().myAccount!.publicKey,
         rsaKeyPairClass.getPrivateKeyString());
-
     bool isTitleOpen = Get.find<CreateNewFolderListTileGetX>().isTitleOpen;
+    String folderTitle = isTitleOpen
+        ? createNewFolderTextEditController.text
+        : CryptoClass.symmetricEncryptData(
+            aesKeyClass, createNewFolderTextEditController.text);
     String accountCp =
         Get.find<AccountGetX>().myAccount!.getCompressedPublicKeyString();
-    print(isTitleOpen);
-    GenerateFolderDTO generateFolderDTO = GenerateFolderDTO(
-        isTitleOpen, createNewFolderTextEditController.text, symmetricKeyEWF);
+    GenerateFolderDTO generateFolderDTO =
+        GenerateFolderDTO(isTitleOpen, folderTitle, symmetricKeyEWF);
     AddWriteAuthorityDTO addWriteAuthorityDTO = AddWriteAuthorityDTO(
         accountCp,
         rsaKeyPairClass.getCompressedPublicKeyString(),

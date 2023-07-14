@@ -1,3 +1,5 @@
+import 'package:cryptofile/model/crypto/aesKeyClass.dart';
+import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dto/fileDTO.dart';
 
 class FileClass {
@@ -13,10 +15,11 @@ class FileClass {
     this.subhead,
   );
 
-  FileClass.fromDTO(FileDTO dto) {
+  FileClass.fromDTO(FileDTO dto, String aesKey) {
     folderCP = dto.folderCP;
     fileId = dto.fileId;
     lastChangedDate = DateTime.parse(dto.lastChangedDate);
-    subhead = dto.subheadEWS;
+    subhead = CryptoClass.symmetricDecryptData(
+        AesKeyClass.fromString(aesKey), dto.subheadEWS);
   }
 }

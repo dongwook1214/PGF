@@ -43,11 +43,31 @@ class _FileMainState extends State<FileMain> {
             )
           : null,
       appBar: AppBar(
-        title: Text(widget.folderClass.getTitle()),
+        title: Text(
+          widget.folderClass.getTitle(),
+          style: TextStyle(
+            color: scheme.onBackground,
+          ),
+        ),
+        actions: widget.folderClass is WriteAuthorityFolderClass
+            ? [_settingActionButton()]
+            : null,
         backgroundColor: Colors.transparent,
         leading: _leading(),
       ),
       body: _listViewBuilder(widget.folderClass.getFolderCP()),
+    );
+  }
+
+  Widget _settingActionButton() {
+    return IconButton(
+      onPressed: () {
+        _scaffoldKey.currentState!.openEndDrawer();
+      },
+      icon: Icon(
+        Icons.menu,
+        color: scheme.onBackground,
+      ),
     );
   }
 
@@ -62,11 +82,13 @@ class _FileMainState extends State<FileMain> {
   }
 
   Widget _listViewBuilder(String folderCP) {
-    Get.find<FileGetX>().setFileList(folderCP);
+    Get.find<FileGetX>()
+        .setFileList(folderCP, widget.folderClass.getSymmetricKey());
     return GetBuilder<FileGetX>(
       builder: (context) {
         return RefreshIndicator(
-          onRefresh: () => Get.find<FileGetX>().setFileList(folderCP),
+          onRefresh: () => Get.find<FileGetX>()
+              .setFileList(folderCP, widget.folderClass.getSymmetricKey()),
           child: ListView.builder(
             itemCount: Get.find<FileGetX>().fileList.length,
             itemBuilder: (BuildContext context, int index) =>

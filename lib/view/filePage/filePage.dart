@@ -1,4 +1,5 @@
 import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
+import 'package:cryptofile/model/crypto/aesKeyClass.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 import 'package:cryptofile/model/dto/modifyFileDTO.dart';
@@ -40,7 +41,10 @@ class _FilePageState extends State<FilePage> {
     return Scaffold(
       appBar: AppBar(
         actions: _actions(),
-        title: Text(widget.fileClass.subhead),
+        title: Text(
+          widget.fileClass.subhead,
+          style: TextStyle(color: scheme.onBackground),
+        ),
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -75,9 +79,15 @@ class _FilePageState extends State<FilePage> {
   Future _onCheckIconPressed() async {
     List<int> byteSign = CryptoClass.makeSignFromPem(
         "validate", widget.folderClass.getPrivateKey());
+    AesKeyClass aesKeyClass =
+        AesKeyClass.fromString(widget.folderClass.getSymmetricKey());
     DioHandling dioHandling = DioHandling();
-    ModifyFileDTO modifyFileDTO = ModifyFileDTO(
-        byteSign, textEditingController.text, widget.fileClass.subhead);
+    String encryptedSubhead =
+        CryptoClass.symmetricEncryptData(aesKeyClass, widget.fileClass.subhead);
+    String encryptedContents = CryptoClass.symmetricEncryptData(
+        aesKeyClass, textEditingController.text);
+    ModifyFileDTO modifyFileDTO =
+        ModifyFileDTO(byteSign, encryptedContents, encryptedSubhead);
     ScaffoldMessenger.of(context).showSnackBar(SnackBarFormat(
         const Text(textAlign: TextAlign.center, "file is modified"), context));
     await dioHandling.modifyFile(
@@ -91,7 +101,8 @@ class _FilePageState extends State<FilePage> {
     if (isFirstBuild) {
       isFirstBuild = false;
       Get.find<FileContentsGetX>()
-          .getFileContents(widget.fileClass.folderCP, widget.fileClass.fileId)
+          .getFileContents(widget.fileClass.folderCP, widget.fileClass.fileId,
+              widget.folderClass.getSymmetricKey())
           .then((value) {
         textEditingController.text =
             Get.find<FileContentsGetX>().contents.fileContents;

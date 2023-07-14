@@ -5,10 +5,13 @@ import 'package:cryptofile/model/folder/writeAuthorityFolderClass.dart';
 import 'package:cryptofile/model/prefsHandling/prefsHandling.dart';
 import 'package:cryptofile/view_model/getx/from_model/accountGetX.dart';
 import 'package:get/get.dart';
+import 'package:mutex/mutex.dart';
 
 class WriteAuthorityFolderGetX extends GetxController {
+  final m = Mutex();
   List<WriteAuthorityFolderClass> folderList = <WriteAuthorityFolderClass>[];
   Future setFolderList() async {
+    await m.acquire();
     if (Get.find<AccountGetX>().myAccount == null) {
       return;
     }
@@ -25,5 +28,6 @@ class WriteAuthorityFolderGetX extends GetxController {
     print("setList Fisnish");
     print(folderList);
     update();
+    m.release();
   }
 }

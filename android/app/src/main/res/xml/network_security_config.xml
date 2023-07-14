@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">http://ec2-43-201-160-79.ap-northeast-2.compute.amazonaws.com:8080</domain>
+    </domain-config>
+</network-security-config>

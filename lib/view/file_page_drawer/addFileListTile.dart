@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:bs58/bs58.dart';
 import 'package:cryptofile/model/crypto/RSAKeyPairClass.dart';
+import 'package:cryptofile/model/crypto/aesKeyClass.dart';
 import 'package:cryptofile/model/crypto/cryptoClass.dart';
 import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 import 'package:cryptofile/model/dto/generateFileDTO.dart';
@@ -83,8 +84,11 @@ class _AddFileListTileState extends State<AddFileListTile> {
     List<int> byteSign = CryptoClass.makeSignFromPem(
         "validate", widget.folderClass.getPrivateKey());
     DioHandling dioHandling = DioHandling();
+    String encryptedSubhead = CryptoClass.symmetricEncryptData(
+        AesKeyClass.fromString(widget.folderClass.getSymmetricKey()),
+        createNewFileTextEditController.text);
     GenerateFileDTO generateFileDTO =
-        GenerateFileDTO(byteSign, createNewFileTextEditController.text);
+        GenerateFileDTO(byteSign, encryptedSubhead);
 
     dioHandling.generateFile(
         RSAKeyPairClass.getPublicKeyModulusExponent(

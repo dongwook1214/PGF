@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cryptofile">
+    package="com.dongwook.cryptofile"
+    android:networkSecurityConfig="@xml/network_security_config">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="cryptofile"
         android:name="${applicationName}"

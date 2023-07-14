@@ -24,9 +24,10 @@ class AesKeyClass {
     crypt = AesCrypt();
     crypt.aesSetMode(AesMode.cbc);
     Random random = Random.secure();
-    key =
-        Uint8List.fromList(List<int>.generate(32, (i) => random.nextInt(256)));
-    iv = Uint8List.fromList(List<int>.generate(16, (i) => random.nextInt(256)));
+    key = Uint8List.fromList(
+        List<int>.generate(32, (i) => random.nextInt(255) + 1));
+    iv = Uint8List.fromList(
+        List<int>.generate(16, (i) => random.nextInt(255) + 1));
     crypt.aesSetKeys(key, iv);
   }
   String getAesKeyString() {

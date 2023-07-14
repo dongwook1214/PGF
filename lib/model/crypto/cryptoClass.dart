@@ -98,6 +98,7 @@ class CryptoClass {
   }
 
   static String symmetricEncryptData(AesKeyClass key, String plainText) {
+    if (plainText.isEmpty) return "";
     AesCrypt crypt = key.crypt;
     String utf8PlainText = _toUtf8(plainText);
     Uint8List encrypted =
@@ -107,10 +108,11 @@ class CryptoClass {
 
   static String symmetricDecryptData(
       AesKeyClass key, String encryptedTextbase58) {
+    if (encryptedTextbase58.isEmpty) return "";
     Uint8List encryptedText = base58.decode(encryptedTextbase58);
     AesCrypt crypt = key.crypt;
     String decrypted = String.fromCharCodes(crypt.aesDecrypt(encryptedText));
-    return _toUtf16(decrypted);
+    return removePadding(_toUtf16(decrypted));
   }
 
   static Uint8List padding(Uint8List list) {
@@ -119,6 +121,14 @@ class CryptoClass {
       copiedList.add(0);
     }
     return Uint8List.fromList(copiedList);
+  }
+
+  static String removePadding(String str) {
+    if (!str.contains(String.fromCharCode(0))) {
+      return str;
+    }
+
+    return str.substring(0, str.indexOf(String.fromCharCode(0)));
   }
 
   static String _toUtf8(String utf16Str) {

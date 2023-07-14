@@ -48,6 +48,7 @@ dependencies:
     get: ^4.6.5
     bs58: ^1.0.2
     intl: ^0.18.0
+    mutex: ^3.0.1
 
     aes_crypt:
         git:

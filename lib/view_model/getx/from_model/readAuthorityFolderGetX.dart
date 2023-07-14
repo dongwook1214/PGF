@@ -3,12 +3,15 @@ import 'package:cryptofile/model/dioHandling/dioHandling.dart';
 import 'package:cryptofile/model/dto/readAuthorityFolderDTO.dart';
 import 'package:cryptofile/model/folder/readAuthorityFolderClass.dart';
 import 'package:get/get.dart';
+import 'package:mutex/mutex.dart';
 
 import 'accountGetX.dart';
 
 class ReadAuthorityFolderGetX extends GetxController {
+  final m = Mutex();
   List<ReadAuthorityFolderClass> folderList = [];
   Future setFolderList() async {
+    await m.acquire();
     if (Get.find<AccountGetX>().myAccount == null) {
       return;
     }
@@ -23,5 +26,6 @@ class ReadAuthorityFolderGetX extends GetxController {
       folderList.add(ReadAuthorityFolderClass.fromDTO(dto, rsaKeyPair));
     }
     update();
+    m.release();
   }
 }
