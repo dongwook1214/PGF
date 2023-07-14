@@ -38,9 +38,7 @@ class _FileMainState extends State<FileMain> {
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: widget.folderClass is WriteAuthorityFolderClass
-          ? FilePageDrawer(
-              folderClass: widget.folderClass,
-            )
+          ? FilePageDrawer(folderClass: widget.folderClass)
           : null,
       appBar: AppBar(
         title: Text(
